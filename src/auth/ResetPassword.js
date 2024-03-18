@@ -12,12 +12,20 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import logo from '../assets/Logo.png';
+import logo from '../assets/logo.png';
 import {COLORS} from '../themes/COLORS';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useNavigation} from '@react-navigation/native';
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+  const handleSignupPress = () => {
+    navigation.navigate('LoginScreen');
+  };
+  const handleProceedPress = () => {
+    // navigation.navigate("EmailVerification")
+  };
   return (
     <View style={styles.container}>
       <View
@@ -54,45 +62,19 @@ const ResetPassword = () => {
             <TextInput
               style={styles.inputeViewStyle}
               placeholder="name@example.com"
-              placeholderTextColor={COLORS.black}
+              // placeholderTextColor={COLORS.black}
             />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: responsiveWidth(90),
-                height: responsiveHeight(6),
-                borderRadius: responsiveWidth(1),
-                borderWidth: responsiveWidth(0.2),
-                paddingRight: responsiveWidth(2),
-              }}>
-              <TextInput
-                style={{
-                  width: responsiveWidth(80),
-                  height: responsiveHeight(6),
-                  paddingLeft: responsiveWidth(2),
-                  borderColor: COLORS.graylight,
-                }}
-                placeholder="***********"
-                placeholderTextColor={COLORS.black}
-                secureTextEntry={!showPassword} // Toggle password visibility
-              />
-              {/* Toggle password visibility */}
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                style={{paddingRight: responsiveWidth(3)}}>
-                <FontAwesome5
-                  name={showPassword ? 'eye' : 'eye-slash'}
-                  size={24}
-                  color={COLORS.graylight}
-                />
-              </TouchableOpacity>
-            </View>
             <TextInput
               style={styles.inputeViewStyle}
-              placeholder="***********"
-              placeholderTextColor={COLORS.black}
+              placeholder="enter old password"
+              // placeholderTextColor={COLORS.black}
+            />
+
+            <TextInput
+              style={styles.inputeViewStyle}
+              placeholder="enter new password"
+              // placeholderTextColor={COLORS.black}
               secureTextEntry // Toggle password visibility
             />
           </View>
@@ -105,7 +87,9 @@ const ResetPassword = () => {
           flex: 0.5,
         }}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableOpacity style={styles.loginBtn}>
+          <TouchableOpacity
+            onPress={handleProceedPress}
+            style={styles.loginBtn}>
             <Text
               style={{
                 color: COLORS.white,
@@ -124,6 +108,7 @@ const ResetPassword = () => {
             marginVertical: responsiveHeight(1),
           }}>
           <Text
+            onPress={handleSignupPress}
             style={{
               color: COLORS.Secondry,
               fontSize: responsiveFontSize(2),
@@ -165,17 +150,18 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
     height: responsiveHeight(6),
     backgroundColor: '#fff',
-    borderRadius: responsiveWidth(1),
+    borderRadius: responsiveWidth(2),
     paddingLeft: responsiveWidth(2),
     borderColor: COLORS.graylight,
     borderWidth: responsiveWidth(0.2),
+    fontSize:responsiveFontSize(2)
   },
 
   loginBtn: {
     width: responsiveWidth(90),
     height: responsiveHeight(6),
     backgroundColor: COLORS.Primary,
-    borderRadius: responsiveWidth(1),
+    borderRadius: responsiveWidth(2),
     justifyContent: 'center',
     alignItems: 'center',
   },

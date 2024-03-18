@@ -12,7 +12,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import logo from '../assets/Logo.png';
+import logo from '../assets/logo.png';
 import {COLORS} from '../themes/COLORS';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 

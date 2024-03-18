@@ -1,24 +1,26 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from '../auth/LoginScreen';
+import LoginScreen from '../auth/Login/LoginScreen';
 import ResetPassword from '../auth/ResetPassword';
 import SplaceScreen from '../screens/SplaceScreen';
 import SignUpScreen from '../auth/SignUpScreen';
-import EmailVerification from '../auth/EmailVerification';
-import PersoalLoan from '../screens/LoanFormScreens/PersoalLoan';
-import BusinessPage from '../screens/LoanFormScreens/BusinessPage';
+import EmailVerification from '../auth/Registration Form/EmailVerification';
+import PersoalLoan from '../screens/Loan Forms/LoanFormScreen';
 const Stack = createStackNavigator();
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {COLORS} from '../themes/COLORS';
-import UserRoleTab from '../auth/UserRoleTab';
-import LoanApplication from '../screens/LoanApplication';
-import HomeScreen from '../screens/BottomTab/HomeScreen';
-import UserProfile from '../screens/UserProfile';
+import UserRoleTab from '../auth/Registration Form/UserRoleTab';
+import LoanApplication from '../screens/Loan Application/LoanApplication';
+import HomeScreen from '../screens/Home/HomeScreen';
+import UserProfile from '../screens/Profile/UserProfile';
+import { BottomTab } from './BottomTab';
+import LoanFormScreen from '../screens/Loan Forms/LoanFormScreen';
 export default function Navigation() {
   const navigation = useNavigation();
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('UserProfile');
+      navigation.navigate('LoginScreen');
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -43,6 +45,11 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="SignUpScreen"
+        component={UserRoleTab}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="ResetPassword"
         component={ResetPassword}
         options={{headerShown: false}}
@@ -58,13 +65,8 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="PersonalLoan"
-        component={PersoalLoan}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="BusinessLoan"
-        component={BusinessPage}
+        name="loanFormScreen"
+        component={LoanFormScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -77,10 +79,9 @@ export default function Navigation() {
         component={UserProfile}
         options={{headerShown: false}}
       />
-
       <Stack.Screen
-        name="SignUpScreen"
-        component={UserRoleTab}
+        name="BottomTab"
+        component={BottomTab}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -5,9 +5,12 @@ import Navigation from './src/navigation/Navigation';
 import {NavigationContainer} from '@react-navigation/native';
 const App = () => {
   return (
-    <NavigationContainer>
-      <Navigation />
-    </NavigationContainer>
+    <View style={{flex:1}}>
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+      <NavigationContainer>
+        <Navigation />
+      </NavigationContainer>
+    </View>
   );
 };
 

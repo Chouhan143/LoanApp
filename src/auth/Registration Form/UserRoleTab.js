@@ -9,26 +9,15 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {COLORS} from '../themes/COLORS';
-import logo from '../assets/Logo.png';
+import {COLORS} from '../../themes/COLORS';
+import logo from '../../assets/logo.png';
 
 export default function UserRoleTab() {
   return (
     <>
+      {/* app logo container */}
       <View style={{backgroundColor: COLORS.white}}>
-        <View
-          style={{
-            borderWidth: responsiveWidth(0.5),
-            borderColor: COLORS.Primary,
-            width: responsiveWidth(28),
-            height: responsiveWidth(28),
-            borderRadius: responsiveWidth(14),
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderStyle: 'dotted',
-            alignSelf: 'center',
-            marginVertical: responsiveHeight(2),
-          }}>
+        <View style={styles.imageConatiner}>
           <Image
             source={logo}
             style={{width: responsiveWidth(20), height: responsiveWidth(20)}}
@@ -44,6 +33,7 @@ export default function UserRoleTab() {
           Sign Up
         </Text>
       </View>
+
       <Tab.Navigator
         screenOptions={{
           tabBarStyle: styles.containerStyle,
@@ -64,7 +54,18 @@ export default function UserRoleTab() {
             ],
           }}
         />
-        <Tab.Screen name="Partner" component={PartnerForm} />
+        <Tab.Screen
+          name="Partner"
+          component={PartnerForm}
+          // options={{
+          //   tabBarIndicatorStyle: [
+          //     styles.Indicator,
+          //     {
+          //       width: responsiveWidth(29),
+          //     },
+          //   ],
+          // }}
+        />
         <Tab.Screen
           name="Associate"
           component={AssociateForm}
@@ -100,5 +101,17 @@ const styles = StyleSheet.create({
     bottom: '10%',
     height: '80%',
     borderRadius: responsiveWidth(1),
+  },
+  imageConatiner: {
+    borderWidth: responsiveWidth(0.5),
+    borderColor: COLORS.Primary,
+    width: responsiveWidth(28),
+    height: responsiveWidth(28),
+    borderRadius: responsiveWidth(14),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'dotted',
+    alignSelf: 'center',
+    marginVertical: responsiveHeight(2),
   },
 });

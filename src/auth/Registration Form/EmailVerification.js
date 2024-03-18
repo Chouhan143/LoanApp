@@ -10,10 +10,12 @@ import React, {useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import logo from '../assets/Logo.png';
-import {COLORS} from '../themes/COLORS';
+import logo from '../../assets/logo.png';
+import {COLORS} from '../../themes/COLORS';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const EmailVerification = () => {
@@ -64,7 +66,7 @@ const EmailVerification = () => {
             <TextInput
               style={styles.inputeViewStyle}
               placeholder="name@example.com"
-              placeholderTextColor={COLORS.black}
+              // placeholderTextColor={COLORS.black}
             />
             <Text
               style={{
@@ -112,7 +114,8 @@ export default EmailVerification;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+   width:responsiveScreenWidth(100),
+   height:responsiveScreenHeight(100),
     backgroundColor: COLORS.white,
   },
   logoView: {
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
     height: responsiveHeight(6),
     backgroundColor: '#fff',
-    borderRadius: responsiveWidth(1),
+    borderRadius: responsiveWidth(2),
     paddingLeft: responsiveWidth(2),
     borderColor: COLORS.graylight,
     borderWidth: responsiveWidth(0.2),
@@ -146,7 +149,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
     height: responsiveHeight(6),
     backgroundColor: COLORS.Primary,
-    borderRadius: responsiveWidth(1),
+    borderRadius: responsiveWidth(2),
     justifyContent: 'center',
     alignItems: 'center',
   },

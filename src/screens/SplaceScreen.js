@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-import logo from '../assets/Logo.png';
+import logo from '../assets/logo.png';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 const SplaceScreen = () => {
   return (
@@ -9,6 +9,7 @@ const SplaceScreen = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor:"white"
       }}>
       <View
         style={{

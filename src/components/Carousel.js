@@ -41,12 +41,14 @@ const Carousel = () => {
   //   Display Images
   const renderItem = ({item, index}) => {
     return (
-      <View>
+      <View >
         <Image
           source={item.image}
           style={{
-            width: ScreenWidth,
+            width:responsiveWidth(96),
             height: responsiveHeight(30),
+            borderRadius:responsiveWidth(3),
+            // marginHorizontal:responsiveWidth(3),
             borderWidth: responsiveWidth(0.1),
           }}
         />
@@ -105,7 +107,7 @@ const Carousel = () => {
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: responsiveHeight(1),
+          marginTop: responsiveHeight(2),
         }}>
         {renderDotIndicators()}
       </View>
@@ -118,8 +120,8 @@ export default Carousel;
 const styles = StyleSheet.create({
   indicatorStyle: {
     backgroundColor: 'red',
-    height: responsiveHeight(1.5),
-    width: responsiveWidth(3),
+    height: responsiveWidth(2),
+    width: responsiveWidth(2),
     borderRadius: responsiveWidth(2),
     marginHorizontal: responsiveWidth(1.2),
   },

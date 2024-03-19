@@ -7,6 +7,8 @@ import {Text, View, Image, StyleSheet} from 'react-native';
 import {
   responsiveFontSize,
   responsiveHeight,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {COLORS} from '../../themes/COLORS';
@@ -14,7 +16,11 @@ import logo from '../../assets/logo.png';
 
 export default function UserRoleTab() {
   return (
-    <>
+    <View
+      style={{
+        width: responsiveScreenWidth(100),
+        height: responsiveScreenHeight(100),
+      }}>
       {/* app logo container */}
       <View style={{backgroundColor: COLORS.white}}>
         <View style={styles.imageConatiner}>
@@ -57,14 +63,14 @@ export default function UserRoleTab() {
         <Tab.Screen
           name="Partner"
           component={PartnerForm}
-          // options={{
-          //   tabBarIndicatorStyle: [
-          //     styles.Indicator,
-          //     {
-          //       width: responsiveWidth(29),
-          //     },
-          //   ],
-          // }}
+          options={{
+            tabBarIndicatorStyle: [
+              styles.Indicator,
+              {
+                marginLeft: 8,
+              },
+            ],
+          }}
         />
         <Tab.Screen
           name="Associate"
@@ -79,7 +85,7 @@ export default function UserRoleTab() {
           }}
         />
       </Tab.Navigator>
-    </>
+    </View>
   );
 }
 
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
     bottom: '10%',
     height: '80%',
-    borderRadius: responsiveWidth(1),
+    borderRadius: responsiveWidth(2),
   },
   imageConatiner: {
     borderWidth: responsiveWidth(0.5),

@@ -1,0 +1,1 @@
+export const BaseUrl = "https://srninfotech.com/projects/loanApp/api"

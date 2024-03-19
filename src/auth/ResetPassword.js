@@ -51,7 +51,7 @@ const ResetPassword = () => {
           style={{
             marginTop: responsiveHeight(3),
           }}>
-          <Text style={styles.Heading}>ResetPassword </Text>
+          <Text style={styles.Heading}>Reset Password </Text>
 
           <View
             style={{

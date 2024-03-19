@@ -21,9 +21,18 @@ import {useNavigation} from '@react-navigation/native';
 import PersonalLoan from './PersonalLoan';
 import BusinessLoan from './BusinessLoan';
 import CarLoan from './CarLoan';
-const LoanFormScreen = () => {
-  const [selected, setSelected] = useState(1);
+import {StackNavigationPropList} from '../../navigation/Navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import LoanForm from './LoanForm';
 
+type NavigationProps = StackNavigationProp<
+  StackNavigationPropList,
+  'userProfile'
+>;
+
+const LoanFormScreen = () => {
+  const [selected, setSelected] = useState<number>(0);
+  const navigation = useNavigation<NavigationProps>();
 
   const data = [
     {key: 1, value: 'Personal loan'},
@@ -31,7 +40,7 @@ const LoanFormScreen = () => {
     {key: 3, value: 'Car Loan'},
   ];
 
-  const handleSelectedLoanProduct = val => {
+  const handleSelectedLoanProduct = (val: number) => {
     setSelected(val);
   };
 
@@ -70,23 +79,16 @@ const LoanFormScreen = () => {
     [],
   );
 
-  const navigation = useNavigation();
-
   return (
-    <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{flex: 1, backgroundColor: '#fff'}}>
       {/* header ui */}
-      <View
-        style={{
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: responsiveHeight(2),
-          marginHorizontal: responsiveWidth(3),
-        }}>
+      <View style={styles.headingContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('UserProfile')}
+          onPress={() => navigation.navigate('userProfile')}
           style={styles.userImg}>
-           <Font6
+          <Font6
             name={'circle-user'}
             size={responsiveFontSize(4.5)}
             color={COLORS.white}
@@ -110,24 +112,15 @@ const LoanFormScreen = () => {
         </Text>
 
         <SelectList
-          setSelected={val => handleSelectedLoanProduct(val)}
+          setSelected={(val: number) => handleSelectedLoanProduct(val)}
           data={data}
           save="key"
-          boxStyles={{
-            borderRadius: responsiveWidth(2),
-            marginTop: responsiveHeight(1.5),
-            borderColor: COLORS.black,
-          }}
+          boxStyles={styles.selectLoanTypeStyle}
           inputStyles={{color: COLORS.black, fontSize: responsiveFontSize(1.8)}}
         />
 
-        {selected === 1 ? (
-          <PersonalLoan />
-        ) : selected === 2 ? (
-          <BusinessLoan />
-        ) : (
-          <CarLoan />
-        )}
+        {/* loan form */}
+        <LoanForm />
       </View>
     </ScrollView>
   );
@@ -136,6 +129,13 @@ const LoanFormScreen = () => {
 export default LoanFormScreen;
 
 const styles = StyleSheet.create({
+  headingContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: responsiveHeight(2),
+    marginHorizontal: responsiveWidth(3),
+  },
   userImg: {
     width: responsiveWidth(10),
     height: responsiveWidth(10),
@@ -173,6 +173,11 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(3),
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  selectLoanTypeStyle: {
+    borderRadius: responsiveWidth(2),
+    marginTop: responsiveHeight(1.5),
+    borderColor: COLORS.black,
   },
   buttonContainer: {
     height: responsiveHeight(10),

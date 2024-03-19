@@ -1,5 +1,12 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  BackHandler,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import {COLORS} from '../../themes/COLORS';
 import {
   responsiveFontSize,
@@ -15,9 +22,14 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {ScrollView} from 'react-native-virtualized-view';
+import styles from './styles';
+import {StackNavigationPropList} from '../../navigation/Navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
 
   const LoanList = [
     {
@@ -77,6 +89,32 @@ const HomeScreen = () => {
     },
   ];
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backHandler);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backHandler);
+    };
+  }, []);
+
+  const backHandler = () => {
+    if (navigation.isFocused()) {
+      Alert.alert('Exit App', 'do you want to exit app ?', [
+        {
+          text: 'cancel',
+          onPress: () => {},
+        },
+        {
+          text: 'Exit',
+          // onPress: () => BackHandler.exitApp(),
+          onPress: () =>navigation.goBack(),
+        },
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View
@@ -88,7 +126,7 @@ const HomeScreen = () => {
           marginHorizontal: responsiveWidth(3),
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('UserProfile')}
+          onPress={() => navigation.navigate('userProfile')}
           style={styles.userImg}>
           <Font6
             name={'circle-user'}
@@ -164,41 +202,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    width: responsiveScreenWidth(100),
-    height: responsiveScreenHeight(100),
-    backgroundColor: COLORS.white,
-  },
-  header: {
-    width: responsiveHeight(100),
-    height: responsiveHeight(10),
-    backgroundColor: 'green',
-    justifyContent: 'space-between',
-    paddingHorizontal: responsiveWidth(2),
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  userImg: {
-    width: responsiveWidth(10),
-    height: responsiveWidth(10),
-    borderRadius: responsiveWidth(5),
-    backgroundColor: COLORS.graylight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  itemContainer: {
-    width: responsiveWidth(29.5),
-    height: responsiveHeight(14),
-    backgroundColor: 'white',
-    // borderColor: COLORS.graylight,
-    margin: responsiveWidth(1),
-    borderRadius: responsiveWidth(2),
-    // borderWidth: responsiveWidth(0.3),
-    // shadowColor: COLORS.black,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 4,
-  },
-});

@@ -9,14 +9,14 @@ import {
 import UserICon from 'react-native-vector-icons/FontAwesome';
 import Security from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const UserProfile = () => {
+const UserProfile: React.FC = () => {
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
       {/* profile image container  */}
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View
+        style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
           <FontAwesome6
             name={'circle-user'}
@@ -45,7 +45,7 @@ const UserProfile = () => {
       </View>
 
       {/* information */}
-      <View style={{flex: 2, justifyContent: 'center'}}>
+      <View style={{flex: 1.5, justifyContent: 'center'}}>
         <TouchableOpacity style={styles.userView}>
           <UserICon
             name={'user-circle-o'}
@@ -81,7 +81,8 @@ const UserProfile = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+      <View
+        style={styles.buttonContainer}>
         <TouchableOpacity style={styles.logOutButton}>
           <MaterialIcons
             name={'logout'}
@@ -105,6 +106,12 @@ const UserProfile = () => {
 export default UserProfile;
 
 const styles = StyleSheet.create({
+  profileContainer:{
+    flex: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'yellow',
+  },
   userImgIcon: {
     width: responsiveWidth(30),
     height: responsiveWidth(30),
@@ -126,15 +133,22 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveWidth(4),
     paddingTop: responsiveHeight(1),
   },
+  buttonContainer:{
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    // backgroundColor: 'red',
+    
+  },
   logOutButton: {
-    position: 'absolute',
-    bottom: responsiveHeight(10),
+    // position: 'absolute',
+    bottom:20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: responsiveWidth(10),
+    // marginHorizontal: responsiveWidth(10),
     backgroundColor: COLORS.Primary,
-    width: responsiveWidth(90),
+    width: responsiveWidth(92),
     height: responsiveHeight(6),
     borderRadius: responsiveWidth(2),
     gap: responsiveWidth(3),

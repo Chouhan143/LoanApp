@@ -1,4 +1,7 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  StackNavigationProp,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import LoginScreen from '../auth/Login/LoginScreen';
 import ResetPassword from '../auth/ResetPassword';
 import SplaceScreen from '../screens/SplaceScreen';
@@ -13,14 +16,30 @@ import UserRoleTab from '../auth/Registration Form/UserRoleTab';
 import LoanApplication from '../screens/Loan Application/LoanApplication';
 import HomeScreen from '../screens/Home/HomeScreen';
 import UserProfile from '../screens/Profile/UserProfile';
-import { BottomTab } from './BottomTab';
+import {BottomTab} from './BottomTab';
 import LoanFormScreen from '../screens/Loan Forms/LoanFormScreen';
+import OtpScreen from '../auth/OTP/OtpScreen';
+
+export type StackNavigationPropList = {
+  loginScreen: undefined;
+  homeScreen: undefined;
+  userProfile: undefined;
+  loanFormScreen: undefined;
+  emailVerification: undefined;
+};
+
+type NavigationProps = StackNavigationProp<
+  StackNavigationPropList,
+  'homeScreen',
+  'loginScreen'
+>;
+
 export default function Navigation() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('LoginScreen');
+      navigation.navigate('loginScreen');
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -40,7 +59,7 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="LoginScreen"
+        name="loginScreen"
         component={LoginScreen}
         options={{headerShown: false}}
       />
@@ -55,8 +74,13 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="EmailVerification"
+        name="emailVerification"
         component={EmailVerification}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="otpScreen"
+        component={OtpScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -75,7 +99,7 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="UserProfile"
+        name="userProfile"
         component={UserProfile}
         options={{headerShown: false}}
       />

@@ -17,73 +17,91 @@ import {
 import logo from '../../assets/logo.png';
 import {COLORS} from '../../themes/COLORS';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {BaseUrl} from '../../constant/BaseUrl';
+import {verifyEmail} from '../../Hooks/verifyEmail';
+import Toast from 'react-native-toast-message';
+import {ActivityIndicator} from 'react-native';
 
 const EmailVerification = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const navigation = useNavigation();
+  const userEmail = useSelector(
+    state => state.ReduxStore.registrationData.user.email,
+  );
+
+  const handleProceedClick = async () => {
+    setLoader(true);
+    let data = await verifyEmail(userEmail);
+    if (data.result) {
+      setLoader(false);
+      Toast.show({
+        type: 'success',
+        text1: 'OTP sent successfully',
+        text2: `${data.message}`,
+        text1Style: {
+          fontSize: responsiveFontSize(2),
+          fontWeight: '700',
+          color: 'green',
+        },
+        text2Style: {
+          fontSize: responsiveFontSize(1.8),
+          fontWeight: '500',
+          color: 'black',
+        },
+      });
+
+      navigation.navigate('otpScreen');
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to sent OTP',
+        text2: `${data.errors.message}`,
+        text1Style: {
+          fontSize: responsiveFontSize(2),
+          fontWeight: '700',
+          color: 'red',
+        },
+        text2Style: {
+          fontSize: responsiveFontSize(1.8),
+          fontWeight: '500',
+          color: 'black',
+        },
+      });
+    }
+    // console.log('email verfication>>>', data);
+  };
+
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        }}>
+      <View style={styles.logoContainer}>
         <View style={styles.logoView}>
-          <Image
-            source={logo}
-            style={{width: responsiveWidth(28), height: responsiveWidth(28)}}
-          />
+          <Image source={logo} style={styles.logoStyle} />
         </View>
       </View>
       {/* login ui  */}
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: responsiveWidth(3),
-        }}>
-        <View
-          style={{
-            marginTop: responsiveHeight(3),
-          }}>
+      <View style={styles.emailContainer}>
+        <View>
           <Text style={styles.Heading}>Email Verification</Text>
-          <Text
-            style={{
-              color: COLORS.black,
-              fontSize: responsiveFontSize(2.5),
-              fontWeight: '400',
-              marginHorizontal: responsiveWidth(3),
-              marginVertical: responsiveWidth(3),
-            }}>
-            Kindly inpute 6 digit code we have send to your email
+          <Text style={styles.alertText}>
+            Kindly inpute 4 digit code we have send to your email
           </Text>
 
           <View
             style={{
+              flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-              gap: responsiveWidth(4),
+              // gap: responsiveWidth(4),
             }}>
             <TextInput
               style={styles.inputeViewStyle}
+              value={userEmail}
+              editable={false}
               placeholder="name@example.com"
-              // placeholderTextColor={COLORS.black}
+              // placeholderTextColor={COLORS.black}a
             />
-            <Text
-              style={{
-                color: COLORS.black,
-                fontSize: responsiveFontSize(2),
-                fontWeight: '400',
-              }}>
-              Did not recieved code?
-            </Text>
-            <Text
-              style={{
-                color: COLORS.Secondry,
-                fontSize: responsiveFontSize(2),
-                fontWeight: '700',
-              }}>
-              Resend code
-            </Text>
           </View>
         </View>
       </View>
@@ -94,15 +112,22 @@ const EmailVerification = () => {
           flex: 0.5,
         }}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableOpacity style={styles.loginBtn}>
-            <Text
-              style={{
-                color: COLORS.white,
-                fontSize: responsiveFontSize(2.5),
-                fontWeight: '700',
-              }}>
-              Proceed
-            </Text>
+          <TouchableOpacity
+            // onPress={() => navigation.navigate('otpScreen')}
+            onPress={handleProceedClick}
+            style={styles.loginBtn}>
+            {loader ? (
+              <ActivityIndicator size={'large'} color={'white'} />
+            ) : (
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontSize: responsiveFontSize(2.5),
+                  fontWeight: '700',
+                }}>
+                Proceed
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -114,9 +139,22 @@ export default EmailVerification;
 
 const styles = StyleSheet.create({
   container: {
-   width:responsiveScreenWidth(100),
-   height:responsiveScreenHeight(100),
+    width: responsiveScreenWidth(100),
+    height: responsiveScreenHeight(100),
     backgroundColor: COLORS.white,
+  },
+  logoContainer: {
+    flex: 1.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoStyle: {width: responsiveWidth(28), height: responsiveWidth(28)},
+  alertText: {
+    color: COLORS.black,
+    fontSize: responsiveFontSize(2.5),
+    fontWeight: '400',
+    marginHorizontal: responsiveWidth(3),
+    marginVertical: responsiveWidth(3),
   },
   logoView: {
     borderWidth: responsiveWidth(0.5),
@@ -135,14 +173,22 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(2),
     color: COLORS.Secondry,
   },
+  emailContainer: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    // paddingHorizontal: responsiveWidth(3),
+  },
   inputeViewStyle: {
     width: responsiveWidth(90),
     height: responsiveHeight(6),
     backgroundColor: '#fff',
     borderRadius: responsiveWidth(2),
-    paddingLeft: responsiveWidth(2),
+    paddingLeft: responsiveWidth(3),
     borderColor: COLORS.graylight,
     borderWidth: responsiveWidth(0.2),
+    fontSize: responsiveFontSize(2),
+    color: 'black',
   },
 
   loginBtn: {

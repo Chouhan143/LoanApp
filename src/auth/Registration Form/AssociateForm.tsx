@@ -4,6 +4,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -23,6 +24,8 @@ import Toast from 'react-native-toast-message';
 import ToastMessage from '../../constant/ToastMessage';
 import {addRegistrationData} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
+import styles from './styles';
+
 type NavigationProps = StackNavigationProp<
   StackNavigationPropList,
   'emailVerification'
@@ -106,7 +109,10 @@ const AssociateForm: React.FC = () => {
 
   return (
     <View style={styles.conatainer}>
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.formContainer}
+        keyboardShouldPersistTaps="handled">
         {/* input filed container */}
         <View style={styles.inputfieldContainer}>
           <TextInput
@@ -146,61 +152,54 @@ const AssociateForm: React.FC = () => {
         {/* button  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={RegisterUser} style={styles.loginBtn}>
-            <Text
-              style={{
-                color: COLORS.white,
-                fontSize: responsiveFontSize(2.5),
-                fontWeight: '700',
-              }}>
-              Sign Up
-            </Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
 
 export default AssociateForm;
 
-const styles = StyleSheet.create({
-  conatainer: {
-    flex: 1,
-    backgroundColor: COLORS.white,
-  },
-  InputeFiledView: {
-    width: responsiveWidth(92),
-    height: responsiveHeight(6),
-    marginVertical: responsiveWidth(1),
-    borderWidth: responsiveWidth(0.2),
-    borderRadius: responsiveWidth(2),
-    paddingLeft: responsiveWidth(2),
-  },
-  inputFiled: {
-    width: responsiveWidth(92),
-    height: responsiveHeight(6),
-    borderWidth: responsiveWidth(0.2),
-    borderRadius: responsiveWidth(2),
-    paddingLeft: responsiveWidth(2),
-    fontSize: responsiveScreenFontSize(2),
-  },
-  loginBtn: {
-    width: responsiveWidth(90),
-    height: responsiveHeight(6),
-    backgroundColor: COLORS.Primary,
-    borderRadius: responsiveWidth(2),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputfieldContainer: {
-    flex: 5,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flex: 1.2,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    // backgroundColor: 'yellow',
-  },
-});
+// const styles = StyleSheet.create({
+//   conatainer: {
+//     flex: 1,
+//     backgroundColor: COLORS.white,
+//   },
+//   InputeFiledView: {
+//     width: responsiveWidth(92),
+//     height: responsiveHeight(6),
+//     marginVertical: responsiveWidth(1),
+//     borderWidth: responsiveWidth(0.2),
+//     borderRadius: responsiveWidth(2),
+//     paddingLeft: responsiveWidth(2),
+//   },
+//   inputFiled: {
+//     width: responsiveWidth(92),
+//     height: responsiveHeight(6),
+//     borderWidth: responsiveWidth(0.2),
+//     borderRadius: responsiveWidth(2),
+//     paddingLeft: responsiveWidth(2),
+//     fontSize: responsiveScreenFontSize(2),
+//   },
+//   loginBtn: {
+//     width: responsiveWidth(90),
+//     height: responsiveHeight(6),
+//     backgroundColor: COLORS.Primary,
+//     borderRadius: responsiveWidth(2),
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   inputfieldContainer: {
+//     flex: 5,
+//     justifyContent: 'space-evenly',
+//     alignItems: 'center',
+//   },
+//   buttonContainer: {
+//     flex: 1.2,
+//     justifyContent: 'flex-start',
+//     alignItems: 'center',
+//     // backgroundColor: 'yellow',
+//   },
+// });

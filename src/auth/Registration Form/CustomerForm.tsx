@@ -4,6 +4,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
 import styles from './styles';
@@ -12,7 +13,11 @@ import {StackNavigationPropList} from '../../navigation/Navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {UserDetails, registerUser} from '../../Hooks/registerUser';
 import Toast from 'react-native-toast-message';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {
+  responsiveFontSize,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+} from 'react-native-responsive-dimensions';
 import {addRegistrationData} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
 type NavigationProps = StackNavigationProp<
@@ -61,9 +66,7 @@ const CustomerForm = () => {
           color: 'black',
         },
       });
-      setTimeout(() => {
-        navigation.navigate('emailVerification');
-      }, 2000);
+      navigation.navigate('emailVerification');
     } else {
       Toast.show({
         type: 'error',
@@ -99,7 +102,9 @@ const CustomerForm = () => {
 
   return (
     <View style={styles.conatainer}>
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView
+        contentContainerStyle={styles.formContainer}
+        keyboardShouldPersistTaps="handled">
         {/* input filed container */}
         <View style={styles.inputfieldContainer}>
           <TextInput
@@ -142,7 +147,7 @@ const CustomerForm = () => {
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

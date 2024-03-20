@@ -10,13 +10,17 @@ import UserICon from 'react-native-vector-icons/FontAwesome';
 import Security from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
 
 const UserProfile: React.FC = () => {
+  const details = useSelector(
+    state => state.ReduxStore.localstorageUserDetails,
+  );
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
+      
       {/* profile image container  */}
-      <View
-        style={styles.profileContainer}>
+      <View style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
           <FontAwesome6
             name={'circle-user'}
@@ -31,7 +35,7 @@ const UserProfile: React.FC = () => {
               color: COLORS.black,
               fontWeight: '700',
             }}>
-            Umesh
+            {details.user_name}
           </Text>
           <Text
             style={{
@@ -39,7 +43,7 @@ const UserProfile: React.FC = () => {
               color: COLORS.black,
               fontWeight: '400',
             }}>
-            Customer
+            {details.role}
           </Text>
         </View>
       </View>
@@ -81,8 +85,7 @@ const UserProfile: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <View
-        style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.logOutButton}>
           <MaterialIcons
             name={'logout'}
@@ -106,7 +109,7 @@ const UserProfile: React.FC = () => {
 export default UserProfile;
 
 const styles = StyleSheet.create({
-  profileContainer:{
+  profileContainer: {
     flex: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -133,16 +136,15 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveWidth(4),
     paddingTop: responsiveHeight(1),
   },
-  buttonContainer:{
+  buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
     // backgroundColor: 'red',
-    
   },
   logOutButton: {
     // position: 'absolute',
-    bottom:20,
+    bottom: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

@@ -19,6 +19,7 @@ import UserProfile from '../screens/Profile/UserProfile';
 import {BottomTab} from './BottomTab';
 import LoanFormScreen from '../screens/Loan Forms/LoanFormScreen';
 import OtpScreen from '../auth/OTP/OtpScreen';
+import Filter from '../Filter';
 
 export type StackNavigationPropList = {
   loginScreen: undefined;
@@ -26,13 +27,13 @@ export type StackNavigationPropList = {
   userProfile: undefined;
   loanFormScreen: undefined;
   emailVerification: undefined;
+  signUpScreen: undefined;
+  resetPassword: undefined;
+  bottomTab:undefined
+  
 };
 
-type NavigationProps = StackNavigationProp<
-  StackNavigationPropList,
-  'homeScreen',
-  'loginScreen'
->;
+export type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 
 export default function Navigation() {
   const navigation = useNavigation<NavigationProps>();
@@ -40,22 +41,27 @@ export default function Navigation() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate('loginScreen');
-    }, 2000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [navigation]);
 
   return (
     <Stack.Navigator
-      initialRouteName="SplaceScreen"
+      initialRouteName="splaceScreen"
       screenOptions={{
         headerMode: 'screen',
         headerTintColor: COLORS.white,
         headerStyle: {backgroundColor: COLORS.Primary},
       }}>
       <Stack.Screen
-        name="SplaceScreen"
+        name="splaceScreen"
         component={SplaceScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="filter"
+        component={Filter}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -64,12 +70,12 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="SignUpScreen"
+        name="signUpScreen"
         component={UserRoleTab}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="ResetPassword"
+        name="resetPassword"
         component={ResetPassword}
         options={{headerShown: false}}
       />
@@ -84,7 +90,7 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Home"
+        name="homeScreen"
         component={HomeScreen}
         options={{headerShown: false}}
       />
@@ -104,7 +110,7 @@ export default function Navigation() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="BottomTab"
+        name="bottomTab"
         component={BottomTab}
         options={{headerShown: false}}
       />

@@ -11,9 +11,7 @@ export type UserDetails = {
 };
 
 export const registerUser = async (details: UserDetails) => {
-
-  // console.log('details>>>>',details);
-  
+  // console.log('details with role>>>>', details);
   try {
     const response = await fetch(`${BaseUrl}/register`, {
       method: 'POST',
@@ -25,6 +23,7 @@ export const registerUser = async (details: UserDetails) => {
 
     if (response.ok) {
       let data = await response.json();
+      // console.log('register user data>>>>', data);
       return data;
     } else {
       let data = await response.json();

@@ -6,7 +6,7 @@ import {
   View,
   BackHandler,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
 import {
   responsiveFontSize,
@@ -25,12 +25,24 @@ import {ScrollView} from 'react-native-virtualized-view';
 import styles from './styles';
 import {StackNavigationPropList} from '../../navigation/Navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {addLocalStorageUserDetails} from '../../redux/Slice';
+import {useDispatch} from 'react-redux';
 
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
+type LocalStorageDetailsProps = {
+  email: string;
+  role: string;
+  status: string;
+  user_id: number;
+  user_name: string;
+  varified: number;
+};
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>();
-
+  const [details, setDetails] = useState<LocalStorageDetailsProps | null>();
+  const dispatch = useDispatch();
   const LoanList = [
     {
       id: 1,
@@ -90,11 +102,21 @@ const HomeScreen = () => {
   ];
 
   useEffect(() => {
+    getUserDetails();
     BackHandler.addEventListener('hardwareBackPress', backHandler);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', backHandler);
     };
   }, []);
+
+  const getUserDetails = async () => {
+    let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
+      'loginUserDetails',
+    ).then((data: string | null) => (data ? JSON.parse(data) : null));
+    setDetails(details);
+    dispatch(addLocalStorageUserDetails(details));
+    // console.log('user details from local storage>>>>>', details);
+  };
 
   const backHandler = () => {
     if (navigation.isFocused()) {
@@ -106,7 +128,7 @@ const HomeScreen = () => {
         {
           text: 'Exit',
           // onPress: () => BackHandler.exitApp(),
-          onPress: () =>navigation.goBack(),
+          onPress: () => navigation.goBack(),
         },
       ]);
       return true;
@@ -145,7 +167,7 @@ const HomeScreen = () => {
             color: 'black',
             fontWeight: '700',
           }}>
-          User
+          {details?.user_name}
         </Text>
 
         <MenuIcon

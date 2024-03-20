@@ -10,34 +10,102 @@ import React, {useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import logo from '../../assets/logo.png';
 import {COLORS} from '../../themes/COLORS';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
+import {userLogin} from '../../Hooks/loginUser';
+import {StackNavigationPropList} from '../../navigation/Navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = () => {
+type NavigationProps = StackNavigationProp<StackNavigationPropList>;
+
+const LoginScreen: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation<NavigationProps>();
 
   const handleSignupPress = () => {
-    navigation.navigate('SignUpScreen');
+    navigation.navigate('signUpScreen');
   };
 
   const handleForgetPasswordPress = () => {
-    navigation.navigate('ResetPassword');
+    navigation.navigate('resetPassword');
   };
 
-  const handleSignInPress = () => {
-    navigation.navigate('BottomTab');
+  const handleSignInPress = async () => {
+    // navigation.navigate('BottomTab');
+    let payload = {
+      email: email,
+      password: password,
+    };
+    let data = await userLogin(payload);
+    // console.log("login response >>>>>",data);
+    if (data.data) {
+      await AsyncStorage.setItem('loginUserDetails', JSON.stringify(data.data));
+
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: `${data.message}`,
+        text1Style: {
+          fontSize: responsiveFontSize(2),
+          fontWeight: '700',
+          color: 'green',
+        },
+        text2Style: {
+          fontSize: responsiveFontSize(1.8),
+          fontWeight: '500',
+          color: 'black',
+        },
+      });
+
+      // navigation based on role
+      switch (data.data.role) {
+        case 'Customer':
+          navigation.navigate('homeScreen');
+          break;
+        case 'Partner':
+          // console.log('navigate to partner');
+          navigation.navigate('bottomTab');
+          break;
+        case 'Associate':
+          navigation.navigate('bottomTab');
+          break;
+        default:
+          navigation.navigate('homeScreen');
+      }
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Failed',
+        text2: `${data.message}`,
+        text1Style: {
+          fontSize: responsiveFontSize(2),
+          fontWeight: '700',
+          color: 'red',
+        },
+        text2Style: {
+          fontSize: responsiveFontSize(1.8),
+          fontWeight: '500',
+          color: 'black',
+        },
+      });
+    }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <View style={styles.logoView}>
           <Image
-            source={logo}
+            source={require('../../assets/logo.png')}
             style={{width: responsiveWidth(28), height: responsiveWidth(28)}}
           />
         </View>
@@ -54,10 +122,12 @@ const LoginScreen = () => {
           <TextInput
             style={styles.inputeViewStyle}
             placeholder="enter email here"
+            onChangeText={text => setEmail(text)}
           />
           <TextInput
             style={styles.inputeViewStyle}
             placeholder="enter password here"
+            onChangeText={text => setPassword(text)}
           />
         </View>
       </View>
@@ -81,13 +151,7 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            marginHorizontal: responsiveWidth(6),
-            flexDirection: 'row',
-            marginVertical: responsiveHeight(1),
-          }}>
+        <View style={styles.forgotContainer}>
           <Text
             onPress={handleForgetPasswordPress}
             style={{
@@ -116,7 +180,8 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: responsiveScreenWidth(100),
+    height: responsiveScreenHeight(100),
     backgroundColor: COLORS.white,
   },
   logoContainer: {
@@ -156,14 +221,21 @@ const styles = StyleSheet.create({
     borderColor: COLORS.graylight,
     borderWidth: responsiveWidth(0.2),
     marginVertical: responsiveWidth(3),
+    fontSize: responsiveFontSize(2),
   },
 
   loginBtn: {
     width: responsiveWidth(90),
     height: responsiveHeight(6),
     backgroundColor: COLORS.Primary,
-    borderRadius: responsiveWidth(1),
+    borderRadius: responsiveWidth(2),
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  forgotContainer: {
+    justifyContent: 'space-between',
+    marginHorizontal: responsiveWidth(6),
+    flexDirection: 'row',
+    marginVertical: responsiveHeight(1),
   },
 });

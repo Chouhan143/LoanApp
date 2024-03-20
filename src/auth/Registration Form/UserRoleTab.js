@@ -18,8 +18,10 @@ export default function UserRoleTab() {
   return (
     <View
       style={{
-        width: responsiveScreenWidth(100),
-        height: responsiveScreenHeight(100),
+        flex: 1,
+        // width: responsiveScreenWidth(100),
+        // height: responsiveScreenHeight(100),
+        // backgroundColor: 'red',
       }}>
       {/* app logo container */}
       <View style={{backgroundColor: COLORS.white}}>

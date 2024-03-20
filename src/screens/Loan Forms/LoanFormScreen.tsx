@@ -31,16 +31,24 @@ type NavigationProps = StackNavigationProp<
 >;
 
 const LoanFormScreen = () => {
-  const [selected, setSelected] = useState<number>(0);
+  const [selected, setSelected] = useState<string>('');
   const navigation = useNavigation<NavigationProps>();
 
   const data = [
     {key: 1, value: 'Personal loan'},
     {key: 2, value: 'Business Loan'},
     {key: 3, value: 'Car Loan'},
+    {key: 4, value: 'Education Loan'},
+    {key: 5, value: 'MSME Loan'},
+    {key: 6, value: 'Home Loan'},
+    {key: 7, value: 'Project Loan'},
+    {key: 8, value: 'Working Capital Loan'},
+    {key: 9, value: 'Loan Against Property'},
+    {key: 10, value: 'CV-CE Loan'},
+    {key: 11, value: 'Gold Loan'},
   ];
 
-  const handleSelectedLoanProduct = (val: number) => {
+  const handleSelectedLoanProduct = (val: string) => {
     setSelected(val);
   };
 
@@ -108,19 +116,23 @@ const LoanFormScreen = () => {
 
       <View style={styles.formContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
-          Loan Product
+          Loan Product <Text style={{color: 'red'}}>*</Text>
         </Text>
 
         <SelectList
-          setSelected={(val: number) => handleSelectedLoanProduct(val)}
+          setSelected={(val: string) => handleSelectedLoanProduct(val)}
           data={data}
-          save="key"
+          save="value"
           boxStyles={styles.selectLoanTypeStyle}
           inputStyles={{color: COLORS.black, fontSize: responsiveFontSize(1.8)}}
+          dropdownTextStyles={{
+            fontSize: responsiveFontSize(1.8),
+            color: 'black',
+          }}
         />
 
         {/* loan form */}
-        <LoanForm />
+        <LoanForm selectedLoan={selected} />
       </View>
     </ScrollView>
   );

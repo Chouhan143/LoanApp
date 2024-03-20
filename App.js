@@ -14,7 +14,7 @@ const App = () => {
         <NavigationContainer>
           <Navigation />
         </NavigationContainer>
-        <Toast ref={ref => Toast.setRef(ref)} />
+        <Toast />
       </Provider>
     </View>
   );

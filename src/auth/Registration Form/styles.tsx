@@ -1,28 +1,34 @@
 import {StyleSheet} from 'react-native';
 import {
-    responsiveHeight,
-    responsiveWidth,
-    responsiveFontSize,
-    responsiveScreenFontSize,
-    responsiveScreenWidth,
-    responsiveScreenHeight,
-  } from 'react-native-responsive-dimensions';
-  import {COLORS} from '../../themes/COLORS';
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+  responsiveScreenFontSize,
+  responsiveScreenWidth,
+  responsiveScreenHeight,
+} from 'react-native-responsive-dimensions';
+import {COLORS} from '../../themes/COLORS';
+
 
 const styles = StyleSheet.create({
   conatainer: {
     flex: 1,
-    // width:responsiveScreenWidth(100),
-    // height:responsiveScreenHeight(100),
     backgroundColor: COLORS.white,
   },
   InputeFiledView: {
     width: responsiveWidth(92),
     height: responsiveHeight(6),
-    marginVertical: responsiveWidth(1),
+    // marginVertical: responsiveWidth(4),
     borderWidth: responsiveWidth(0.2),
     borderRadius: responsiveWidth(2),
     paddingLeft: responsiveWidth(2),
+  },
+  formContainer: {
+    flexGrow: 1,
+    // height: responsiveScreenHeight(50),
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    // paddingHorizontal: 20,
   },
   inputFiled: {
     width: responsiveWidth(92),
@@ -31,9 +37,10 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(2),
     paddingLeft: responsiveWidth(2),
     fontSize: responsiveScreenFontSize(2),
+    marginVertical:responsiveScreenWidth(3)
   },
   loginBtn: {
-    width: responsiveWidth(90),
+    width: responsiveWidth(92),
     height: responsiveHeight(6),
     backgroundColor: COLORS.Primary,
     borderRadius: responsiveWidth(2),
@@ -44,18 +51,19 @@ const styles = StyleSheet.create({
     flex: 5,
     justifyContent: 'space-evenly',
     alignItems: 'center',
+    marginTop:responsiveWidth(2)
   },
   buttonContainer: {
-    flex: 1.2,
+    flex: 1.5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     // backgroundColor: 'yellow',
   },
-  buttonText:{
+  buttonText: {
     color: COLORS.white,
     fontSize: responsiveFontSize(2.5),
     fontWeight: '700',
-  }
+  },
 });
 
 export default styles;

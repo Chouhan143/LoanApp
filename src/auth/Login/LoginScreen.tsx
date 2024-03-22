@@ -5,8 +5,11 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ScrollView,
+  Alert,
+  BackHandler,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -22,6 +25,7 @@ import {StackNavigationPropList} from '../../navigation/Navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ActivityIndicator} from 'react-native';
 
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 
@@ -30,16 +34,26 @@ const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<NavigationProps>();
+  const [loader, setLoader] = useState(false);
 
   const handleSignupPress = () => {
     navigation.navigate('signUpScreen');
   };
 
   const handleForgetPasswordPress = () => {
-    navigation.navigate('resetPassword');
+    navigation.navigate('resetVerifyEmail');
   };
 
+  useEffect(() => {
+    // AsyncStorage.clear();
+    BackHandler.addEventListener('hardwareBackPress', backHandler);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backHandler);
+    };
+  }, []);
+
   const handleSignInPress = async () => {
+    setLoader(true);
     // navigation.navigate('BottomTab');
     let payload = {
       email: email,
@@ -49,7 +63,7 @@ const LoginScreen: React.FC = () => {
     // console.log("login response >>>>>",data);
     if (data.data) {
       await AsyncStorage.setItem('loginUserDetails', JSON.stringify(data.data));
-
+      setLoader(false);
       Toast.show({
         type: 'success',
         text1: 'Success',
@@ -67,12 +81,14 @@ const LoginScreen: React.FC = () => {
       });
 
       // navigation based on role
+      // console.log(data.data.role);
+
       switch (data.data.role) {
         case 'Customer':
           navigation.navigate('homeScreen');
           break;
         case 'Partner':
-          // console.log('navigate to partner');
+          console.log('navigate to partner');
           navigation.navigate('bottomTab');
           break;
         case 'Associate':
@@ -82,6 +98,7 @@ const LoginScreen: React.FC = () => {
           navigation.navigate('homeScreen');
       }
     } else {
+      setLoader(false);
       Toast.show({
         type: 'error',
         text1: 'Failed',
@@ -100,8 +117,28 @@ const LoginScreen: React.FC = () => {
     }
   };
 
+  const backHandler = () => {
+    if (navigation.isFocused()) {
+      // Alert.alert('Exit App', 'do you want to exit app ?', [
+      //   {
+      //     text: 'cancel',
+      //     onPress: () => {},
+      //   },
+      //   {
+      //     text: 'Exit',
+      //     onPress: () => BackHandler.exitApp(),
+      //     // onPress: () => navigation.goBack(),
+      //   },
+      // ]);
+      BackHandler.exitApp();
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.logoContainer}>
         <View style={styles.logoView}>
           <Image
@@ -114,8 +151,8 @@ const LoginScreen: React.FC = () => {
       {/* login ui  */}
       <View
         style={{
-          flex: 1,
-          // paddingHorizontal: responsiveWidth(3),
+          width: responsiveScreenWidth(100),
+          height: responsiveScreenHeight(33.33),
         }}>
         <View style={styles.inputFormContainer}>
           <Text style={styles.Heading}>Sign In</Text>
@@ -126,7 +163,8 @@ const LoginScreen: React.FC = () => {
           />
           <TextInput
             style={styles.inputeViewStyle}
-            placeholder="enter password here"
+            placeholder="enter 6 digit password "
+            // maxLength={6}
             onChangeText={text => setPassword(text)}
           />
         </View>
@@ -135,20 +173,23 @@ const LoginScreen: React.FC = () => {
       {/* Sign In button  */}
       <View
         style={{
-          flex: 1,
-          justifyContent: 'center',
-          // backgroundColor:"red"
+          width: responsiveScreenWidth(100),
+          // height: responsiveScreenHeight(33.33),
         }}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity onPress={handleSignInPress} style={styles.loginBtn}>
-            <Text
-              style={{
-                color: COLORS.white,
-                fontSize: responsiveFontSize(2.5),
-                fontWeight: '700',
-              }}>
-              Sign In
-            </Text>
+            {loader ? (
+              <ActivityIndicator size={'large'} color={'white'} />
+            ) : (
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontSize: responsiveFontSize(2.5),
+                  fontWeight: '700',
+                }}>
+                Sign In
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.forgotContainer}>
@@ -172,7 +213,7 @@ const LoginScreen: React.FC = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -180,12 +221,14 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     width: responsiveScreenWidth(100),
-    height: responsiveScreenHeight(100),
+    // height: responsiveScreenHeight(80),
     backgroundColor: COLORS.white,
   },
   logoContainer: {
-    flex: 1.5,
+    width: responsiveScreenWidth(100),
+    height: responsiveScreenHeight(33.33),
     justifyContent: 'center',
     alignItems: 'center',
   },

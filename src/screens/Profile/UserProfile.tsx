@@ -1,5 +1,12 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  Alert,
+  BackHandler,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
 import {
   responsiveFontSize,
@@ -10,15 +17,87 @@ import UserICon from 'react-native-vector-icons/FontAwesome';
 import Security from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {NavigationProps} from '../../navigation/Navigation';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {clearLocalStorageUserDetails} from '../../redux/Slice';
+import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
 
 const UserProfile: React.FC = () => {
+  const navigation = useNavigation<NavigationProps>();
+  const [userDetails, setUserDetails] = useState({});
+  const dispatch = useDispatch();
   const details = useSelector(
     state => state.ReduxStore.localstorageUserDetails,
   );
+
+  // console.log(details);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserDetails();
+      BackHandler.addEventListener('hardwareBackPress', backHandler);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', backHandler);
+      };
+    }, []),
+  );
+
+  const getUserDetails = async () => {
+    let payload = {
+      user_id: details.user_id,
+    };
+    let data = await fetchUserDetails(payload);
+    setUserDetails(data);
+    // console.log('user details personal info screen >>>>', data);
+  };
+
+  const handleLogout = async () => {
+    Alert.alert('Logout', 'Are you sure you want to log out', [
+      {
+        text: 'cancel',
+        onPress: () => {},
+      },
+      {
+        text: 'logout',
+        onPress: async () => {
+          await AsyncStorage.clear();
+          // dispatch(clearLocalStorageUserDetails({}));
+          navigation.navigate('loginScreen');
+
+          BackHandler.exitApp();
+        },
+      },
+    ]);
+    // await AsyncStorage.clear();
+  };
+
+  const backHandler = () => {
+    if (navigation.isFocused()) {
+      switch (details.role) {
+        case 'customer':
+          navigation.navigate('homeScreen');
+          break;
+        case 'partner':
+          // console.log('navigation to partner screen');
+          navigation.navigate('bottomTab');
+          break;
+        case 'associate':
+          navigation.navigate('bottomTab');
+          break;
+        default:
+          // navigation.navigate('loginScreen');
+          break;
+      }
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
-      
       {/* profile image container  */}
       <View style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
@@ -35,7 +114,7 @@ const UserProfile: React.FC = () => {
               color: COLORS.black,
               fontWeight: '700',
             }}>
-            {details.user_name}
+            {details?.user_name}
           </Text>
           <Text
             style={{
@@ -43,14 +122,16 @@ const UserProfile: React.FC = () => {
               color: COLORS.black,
               fontWeight: '400',
             }}>
-            {details.role}
+            {details?.role}
           </Text>
         </View>
       </View>
 
       {/* information */}
       <View style={{flex: 1.5, justifyContent: 'center'}}>
-        <TouchableOpacity style={styles.userView}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('personalDetails')}
+          style={styles.userView}>
           <UserICon
             name={'user-circle-o'}
             size={responsiveFontSize(3.5)}
@@ -59,13 +140,26 @@ const UserProfile: React.FC = () => {
           <Text style={styles.serviceText}>Personal Information</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.userView}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('changePasswordScreen')}
+          style={styles.userView}>
           <Security
             name={'security'}
             size={responsiveFontSize(3.5)}
             color={COLORS.black}
           />
           <Text style={styles.serviceText}>Change Password</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('emailVerification')}
+          style={styles.userView}>
+          <Security
+            name={'security'}
+            size={responsiveFontSize(3.5)}
+            color={COLORS.black}
+          />
+          <Text style={styles.serviceText}>Verify Email</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -86,7 +180,7 @@ const UserProfile: React.FC = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.logOutButton}>
+        <TouchableOpacity onPress={handleLogout} style={styles.logOutButton}>
           <MaterialIcons
             name={'logout'}
             size={responsiveFontSize(3)}

@@ -14,7 +14,7 @@ export const verifyEmail = async (email: string) => {
     });
     if (response.ok) {
       let data = await response.json();
-    //   console.log('otp sended on given email', data);
+      console.log('otp sended on given email', data);
       return data;
     } else {
       let data = await response.json();

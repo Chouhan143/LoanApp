@@ -102,12 +102,12 @@ const LoanFormScreen = () => {
             color={COLORS.white}
           />
         </TouchableOpacity>
-
+{/* 
         <MenuIcon
           name={'menu'}
           size={responsiveFontSize(4)}
           color={COLORS.black}
-        />
+        /> */}
       </View>
 
       <View style={{alignItems: 'center'}}>

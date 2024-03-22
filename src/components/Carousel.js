@@ -1,54 +1,38 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Image,
-  Dimensions,
-} from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
-import {
-  responsiveHeight,
-  responsiveScreenWidth,
-  responsiveWidth,
-} from 'react-native-responsive-dimensions';
+import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { fetchSliderImages } from '../Hooks/fetchSliderImages';
 
-const Carousel = () => {
+
+const CarouselComponent = () => {
   const FlatlistRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [carousel, setCarousel] = useState([]);
 
-  const ScreenWidth = Dimensions.get('screen').width;
+  useEffect(() => {
+    getSliderImages();
+  }, []);
 
-  const CarouselData = [
-    {
-      id: 1,
-      image: require('../assets/Loan1.jpg'),
-    },
-    {
-      id: 2,
-      image: require('../assets/Loan2.jpg'),
-    },
-    {
-      id: 3,
-      image: require('../assets/Loan3.jpg'),
-    },
-    {
-      id: 4,
-      image: require('../assets/Loan4.jpg'),
-    },
-  ];
+  const getSliderImages = async () => {
+    try {
+      let url = await fetchSliderImages();
+      setCarousel(url);
+    } catch (error) {
+      console.log('fetchSliderImagesData error >>>>>', error);
+    }
+  };
 
-  //   Display Images
-  const renderItem = ({item, index}) => {
+  // Display Images
+  const renderItem = ({ item, index }) => {
+    // console.log(item);
     return (
-      <View >
+      <View>
         <Image
-          source={item.image}
+          source={{uri:item.slider_img}}
           style={{
-            width:responsiveWidth(96),
+            width: responsiveWidth(96),
             height: responsiveHeight(30),
-            borderRadius:responsiveWidth(3),
-            // marginHorizontal:responsiveWidth(3),
+            borderRadius: responsiveWidth(3),
             borderWidth: responsiveWidth(0.1),
           }}
         />
@@ -66,12 +50,12 @@ const Carousel = () => {
           alignItems: 'center',
           marginTop: responsiveHeight(1),
         }}>
-        {CarouselData.map((dot, index) => (
+        {carousel.map((dot, index) => (
           <View
             key={index}
             style={[
               styles.indicatorStyle,
-              {backgroundColor: index === activeIndex ? '#24c1db' : '#c3c5d1'},
+              { backgroundColor: index === activeIndex ? '#24c1db' : '#c3c5d1' },
             ]}></View>
         ))}
       </View>
@@ -79,8 +63,8 @@ const Carousel = () => {
   };
 
   useEffect(() => {
-    const interVal = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % CarouselData.length;
+    const interval = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % carousel.length;
       setActiveIndex(nextIndex);
       FlatlistRef.current.scrollToIndex({
         animated: true,
@@ -88,16 +72,16 @@ const Carousel = () => {
       });
     }, 3000);
 
-    return () => clearInterval(interVal);
-  }, [activeIndex, CarouselData.length]);
+    return () => clearInterval(interval);
+  }, [activeIndex, carousel.length]);
 
   return (
     <View>
       <FlatList
         ref={FlatlistRef}
-        data={CarouselData}
+        data={carousel}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id.toString()}
         horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
@@ -115,7 +99,7 @@ const Carousel = () => {
   );
 };
 
-export default Carousel;
+export default CarouselComponent;
 
 const styles = StyleSheet.create({
   indicatorStyle: {

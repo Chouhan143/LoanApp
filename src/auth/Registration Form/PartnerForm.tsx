@@ -23,7 +23,7 @@ import Toast from 'react-native-toast-message';
 import {addRegistrationData} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
 import styles from './styles';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 type NavigationProps = StackNavigationProp<
   StackNavigationPropList,
   'emailVerification'
@@ -47,7 +47,7 @@ const PartnerForm = () => {
       password: password,
       location: location,
       address: address,
-      role: 2,
+      role: 'partner',
     };
     // console.log("payload >>>",details);
 

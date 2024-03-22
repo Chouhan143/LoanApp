@@ -13,8 +13,15 @@ const slice = createSlice({
     addLocalStorageUserDetails: (state, action) => {
       state.localstorageUserDetails = action.payload;
     },
+    clearLocalStorageUserDetails: (state, action) => {
+      state.localstorageUserDetails = {};
+    },
   },
 });
 
-export const {addRegistrationData, addLocalStorageUserDetails} = slice.actions;
+export const {
+  addRegistrationData,
+  addLocalStorageUserDetails,
+  clearLocalStorageUserDetails,
+} = slice.actions;
 export default slice.reducer;

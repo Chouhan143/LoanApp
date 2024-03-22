@@ -10,7 +10,7 @@ export const userLogin = async (details: Details) => {
   };
   try {
     let response = await fetch(
-      'https://srninfotech.com/projects/loanApp/api/login ',
+      'https://srninfotech.com/projects/loanApp/api/login',
       {
         method: 'POST',
         headers: {

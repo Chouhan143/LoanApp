@@ -20,7 +20,7 @@ const SplaceScreen = () => {
   useEffect(() => {
     // Trigger the animation to scale from 0 to 1
     scaleValue.value = withTiming(1, {
-      duration: 1800,
+      duration: 1200,
       easing: Easing.inOut(Easing.ease),
     });
   }, []);

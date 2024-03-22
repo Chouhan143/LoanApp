@@ -49,7 +49,7 @@ const AssociateForm: React.FC = () => {
       password: password,
       location: location,
       address: address,
-      role: 3,
+      role: 'associate',
     };
     // console.log("payload >>>",details);
 

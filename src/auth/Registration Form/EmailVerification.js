@@ -5,6 +5,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -27,13 +28,25 @@ import {ActivityIndicator} from 'react-native';
 const EmailVerification = () => {
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
-  const userEmail = useSelector(
-    state => state.ReduxStore.registrationData.user.email,
+
+  const email = useSelector(state =>
+    state.ReduxStore.localstorageUserDetails.email
+      ? state.ReduxStore.localstorageUserDetails.email
+      : state.ReduxStore.registrationData?.user.email,
   );
+
+  // const userEmail = useSelector(
+  //   // state => state.ReduxStore.registrationData,
+  //   state => state.ReduxStore.registrationData?.user.email,
+  // );
+  // const email = useSelector(
+  //   state => state.ReduxStore.localstorageUserDetails.email,
+  // );
+  // console.log(email);
 
   const handleProceedClick = async () => {
     setLoader(true);
-    let data = await verifyEmail(userEmail);
+    let data = await verifyEmail(email);
     if (data.result) {
       setLoader(false);
       Toast.show({
@@ -74,7 +87,7 @@ const EmailVerification = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.logoContainer}>
         <View style={styles.logoView}>
           <Image source={logo} style={styles.logoStyle} />
@@ -97,8 +110,7 @@ const EmailVerification = () => {
             }}>
             <TextInput
               style={styles.inputeViewStyle}
-              value={userEmail}
-              editable={false}
+              value={email ? email : email}
               placeholder="name@example.com"
               // placeholderTextColor={COLORS.black}a
             />
@@ -131,7 +143,7 @@ const EmailVerification = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -144,7 +156,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   logoContainer: {
-    flex: 1.3,
+    width: responsiveScreenWidth(100),
+    height: responsiveScreenHeight(43.33),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -174,7 +187,8 @@ const styles = StyleSheet.create({
     color: COLORS.Secondry,
   },
   emailContainer: {
-    flex: 1,
+    width: responsiveScreenWidth(100),
+    height: responsiveScreenHeight(33.33),
     justifyContent: 'space-evenly',
     alignItems: 'center',
     // paddingHorizontal: responsiveWidth(3),

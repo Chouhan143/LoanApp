@@ -43,7 +43,7 @@ const CustomerForm = () => {
       password: password,
       location: location,
       address: address,
-      role: 1,
+      role: "customer",
     };
     // console.log("payload >>>",details);
 

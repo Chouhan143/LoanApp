@@ -5,6 +5,7 @@ import {
   Text,
   View,
   BackHandler,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -28,6 +29,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {addLocalStorageUserDetails} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
+import {fetchSliderImages} from '../../Hooks/fetchSliderImages';
 
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 type LocalStorageDetailsProps = {
@@ -39,10 +41,12 @@ type LocalStorageDetailsProps = {
   varified: number;
 };
 
-const HomeScreen = () => {
+const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
   const [details, setDetails] = useState<LocalStorageDetailsProps | null>();
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
   const LoanList = [
     {
       id: 1,
@@ -102,7 +106,12 @@ const HomeScreen = () => {
   ];
 
   useEffect(() => {
+    setLoading(true);
     getUserDetails();
+    AsyncStorage.setItem('loginStatus', JSON.stringify(true));
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     BackHandler.addEventListener('hardwareBackPress', backHandler);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', backHandler);
@@ -118,6 +127,8 @@ const HomeScreen = () => {
     // console.log('user details from local storage>>>>>', details);
   };
 
+  // let url = fetchSliderImages()
+
   const backHandler = () => {
     if (navigation.isFocused()) {
       Alert.alert('Exit App', 'do you want to exit app ?', [
@@ -127,8 +138,8 @@ const HomeScreen = () => {
         },
         {
           text: 'Exit',
-          // onPress: () => BackHandler.exitApp(),
-          onPress: () => navigation.goBack(),
+          onPress: () => BackHandler.exitApp(),
+          // onPress: () => navigation.goBack(),
         },
       ]);
       return true;
@@ -139,86 +150,76 @@ const HomeScreen = () => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: responsiveHeight(2),
-          marginHorizontal: responsiveWidth(3),
-        }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('userProfile')}
-          style={styles.userImg}>
-          <Font6
-            name={'circle-user'}
-            size={responsiveFontSize(4.5)}
-            color={COLORS.white}
-          />
-        </TouchableOpacity>
+      {loading ? (
+        <View
+          style={[
+            styles.container,
+            {alignItems: 'center', justifyContent: 'center'},
+          ]}>
+          <ActivityIndicator size={'large'} color={COLORS.Primary} />
+        </View>
+      ) : (
+        <View>
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('userProfile')}
+              style={styles.userImg}>
+              <Font6
+                name={'circle-user'}
+                size={responsiveFontSize(4.5)}
+                color={COLORS.white}
+              />
+            </TouchableOpacity>
 
-        <Text
-          style={{
-            // alignSelf:'flex-start',
-            textAlign: 'center',
-            position: 'absolute',
-            left: 60,
-            fontSize: responsiveFontSize(2.8),
-            color: 'black',
-            fontWeight: '700',
-          }}>
-          {details?.user_name}
-        </Text>
+            <Text
+              style={{
+                // alignSelf:'flex-start',
+                textAlign: 'center',
+                position: 'absolute',
+                left: 60,
+                fontSize: responsiveFontSize(2.8),
+                color: 'black',
+                fontWeight: '700',
+              }}>
+              {details?.user_name}
+            </Text>
 
-        <MenuIcon
-          name={'menu'}
-          size={responsiveFontSize(4)}
-          color={COLORS.black}
-        />
-      </View>
-      {/* Carosel */}
-      <View style={{width: responsiveWidth(96), alignSelf: 'center'}}>
-        <Carousel />
-      </View>
-      {/* Loan Produt */}
-      <View style={{backgroundColor: 'white', alignItems: 'center'}}>
-        <Text
-          style={{
-            fontSize: responsiveFontSize(2.5),
-            color: COLORS.black,
-            marginVertical: responsiveWidth(2),
-            marginLeft: responsiveWidth(3),
-            alignSelf: 'flex-start',
-            fontWeight: '700',
-          }}>
-          Loan Products
-        </Text>
-        <FlatList
-          data={LoanList}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('loanFormScreen')}
-                style={styles.itemContainer}>
-                <MaterialIcons
-                  name={`${item.icon}`}
-                  size={30}
-                  color={COLORS.Primary}
-                />
-                <Text
-                  style={{
-                    fontSize: responsiveFontSize(1.7),
-                    marginVertical: responsiveWidth(2),
-                    color: COLORS.black,
-                  }}>
-                  {item.Loan_Category}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-          numColumns={3}
-        />
-      </View>
+            <MenuIcon
+              name={'menu'}
+              size={responsiveFontSize(4)}
+              color={COLORS.black}
+            />
+          </View>
+          {/* Carosel */}
+          <View style={{width: responsiveWidth(96), alignSelf: 'center'}}>
+            <Carousel />
+          </View>
+          {/* Loan Produt */}
+          <View style={{backgroundColor: 'white', alignItems: 'center'}}>
+            <Text style={styles.loanProductText}>Loan Products</Text>
+            <FlatList
+              data={LoanList}
+              renderItem={({item}) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('loanFormScreen')}
+                    style={styles.itemContainer}>
+                    <MaterialIcons
+                      name={`${item.icon}`}
+                      size={30}
+                      color={COLORS.Primary}
+                    />
+                    <Text style={styles.loanCategoryText}>
+                      {item.Loan_Category}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }}
+              numColumns={3}
+            />
+          </View>
+        </View>
+      )}
     </ScrollView>
   );
 };

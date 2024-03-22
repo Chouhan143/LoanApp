@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import {BaseUrl} from '../constant/BaseUrl';
 
 export type LoanFormProps = {
@@ -14,18 +15,19 @@ export type LoanFormProps = {
   pan_image: string;
   gst_number?: string;
   last_fy: string;
+  user_id: string;
 };
 
 export const submitLoanForm = async (formDetails: LoanFormProps) => {
-//   console.log('final loan details?>>>>>', formDetails);
+  // console.log('final loan details?>>>>>', formDetails);
 
   try {
     const response = await fetch(`${BaseUrl}/customer_loan`, {
       method: 'POST',
+      body: formDetails,
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'multipart/form-data',
       },
-      body: JSON.stringify(formDetails),
     });
 
     if (response.ok) {
@@ -38,6 +40,16 @@ export const submitLoanForm = async (formDetails: LoanFormProps) => {
       return data;
     }
   } catch (error) {
+    Alert.alert(
+      'Failed to submit',
+      'unexpeted error occurred while submitting form',
+      [
+        {
+          text: 'OK',
+          onPress: () => {},
+        },
+      ],
+    );
     console.log('failed to submit form>>>>', error);
     return error;
   }

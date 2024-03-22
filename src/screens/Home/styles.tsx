@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   header: {
     width: responsiveHeight(100),
     height: responsiveHeight(10),
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     justifyContent: 'space-between',
     paddingHorizontal: responsiveWidth(2),
     flexDirection: 'row',
@@ -43,6 +43,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
+  },
+  loanProductText: {
+    fontSize: responsiveFontSize(2.5),
+    color: COLORS.black,
+    marginVertical: responsiveWidth(2),
+    marginLeft: responsiveWidth(3),
+    alignSelf: 'flex-start',
+    fontWeight: '700',
+  },
+  loanCategoryText: {
+    fontSize: responsiveFontSize(1.7),
+    marginVertical: responsiveWidth(2),
+    color: COLORS.black,
   },
 });
 

@@ -2,7 +2,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import CustomerForm from './CustomerForm';
 import PartnerForm from './PartnerForm';
 import AssociateForm from './AssociateForm';
-const Tab = createMaterialTopTabNavigator();
+
 import {Text, View, Image, StyleSheet} from 'react-native';
 import {
   responsiveFontSize,
@@ -13,7 +13,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import {COLORS} from '../../themes/COLORS';
 import logo from '../../assets/logo.png';
-
+const Tab = createMaterialTopTabNavigator();
 export default function UserRoleTab() {
   return (
     <View

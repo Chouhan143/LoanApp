@@ -11,6 +11,7 @@ import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
+  responsiveScreenFontSize,
 } from 'react-native-responsive-dimensions';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import UserICon from 'react-native-vector-icons/FontAwesome';
@@ -22,14 +23,16 @@ import {useNavigation} from '@react-navigation/native';
 import {LoanFormProps, submitLoanForm} from '../../Hooks/submitLoanForm';
 import DocumentPicker from 'react-native-document-picker';
 import Toast from 'react-native-toast-message';
-
+import {useSelector} from 'react-redux';
+import {ActivityIndicator} from 'react-native';
+import {NavigationProps} from '../../navigation/Navigation';
 const LoanForm: React.FC<{selectedLoan: string}> = ({
   selectedLoan,
 }: {
   selectedLoan: string;
 }) => {
   const [firm_name, setFirm_name] = useState('');
-  const [loan_category, setLoan_Category] = useState('');
+  // const [loan_category, setLoan_Category] = useState(selectedLoan);
   const [mobile, setMobile] = useState('');
   const [contact_person, setContact_Person] = useState('');
   const [email, setEmail] = useState('');
@@ -37,10 +40,17 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   const [pan_number, setPan_Number] = useState('');
   const [current_fy, setCurrent_Fy] = useState('');
   const [loan_required, setLoan_Required] = useState('');
-  const [img, setImg] = useState('dfkjahdfkhakfhakhdfk.png');
-  const [pan_image, setPan_Image] = useState('adfhakdflklfjaldf.png');
+  const [img, setImg] = useState('');
+  const [pan_image, setPan_Image] = useState('');
   const [gst_number, setGst_Number] = useState('');
   const [last_fy, setLast_Fy] = useState('');
+  const [loader, setLoader] = useState(false);
+  const details = useSelector(
+    state => state.ReduxStore.localstorageUserDetails,
+  );
+  const navigation = useNavigation<NavigationProps>();
+  // console.log('user_id',user_id);
+
   // console.log('loan type', selectedLoan);
 
   // const gender = useMemo(
@@ -76,40 +86,129 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   // );
 
   const handleSumbitLoanForm = async () => {
-    let payload: LoanFormProps = {
-      loan_category: selectedLoan,
-      firm_name: firm_name,
-      mobile: mobile,
-      contact_person: contact_person,
-      email: email,
-      date_of_corporate: date_of_corporate,
-      pan_number: pan_number,
-      pan_image: pan_image,
-      current_fy: current_fy,
-      loan_required: loan_required,
-      img: img,
-      gst_number: gst_number,
-      last_fy: last_fy,
-    };
+    setLoader(true);
+    const formdata = new FormData();
+    // let payload: LoanFormProps = {
+    //   loan_category: selectedLoan,
+    //   firm_name: firm_name,
+    //   mobile: mobile,
+    //   contact_person: contact_person,
+    //   email: email,
+    //   date_of_corporate: date_of_corporate,
+    //   pan_number: pan_number,
+    //   pan_image: pan_image,
+    //   current_fy: current_fy,
+    //   loan_required: loan_required,
+    //   img: img,
+    //   gst_number: gst_number,
+    //   last_fy: last_fy,
+    // };
 
-    let data = await submitLoanForm(payload);
-    console.log('submit form response >>>>>>',data);
-    if (data.errors) {
-      Toast.show({
-        type: 'error',
-        text1: 'Failed to submit',
-        text2: 'failed to submit your loan application',
-        text1Style: {
-          fontSize: responsiveFontSize(2),
-          fontWeight: '700',
-          color: 'red',
-        },
-        text2Style: {
-          fontSize: responsiveFontSize(1.8),
-          fontWeight: '500',
-          color: 'black',
-        },
+    // Append text data
+    formdata.append('user_id', details.user_id);
+    formdata.append('loan_category', selectedLoan);
+    formdata.append('firm_name', firm_name);
+    formdata.append('mobile', mobile);
+    formdata.append('contact_person', contact_person);
+    formdata.append('email', email);
+    formdata.append('date_of_corporate', date_of_corporate);
+    formdata.append('pan_number', pan_number);
+    formdata.append('current_fy', current_fy);
+    formdata.append('loan_required', loan_required);
+    formdata.append('gst_number', gst_number);
+    formdata.append('last_fy', last_fy);
+    // formdata.append('code', details.code);
+
+    // console.log("loan category",selectedLoan);
+    
+    // Append image URIs
+    if (img) {
+      const imgName = img.split('/').pop(); // Get image name from URI
+      formdata.append('img', {
+        uri: img,
+        name: imgName,
+        type: 'image/jpeg', // Adjust according to your image type
       });
+    }
+
+    if (pan_image) {
+      const panImageName = pan_image.split('/').pop(); // Get image name from URI
+      formdata.append('pan_image', {
+        uri: pan_image,
+        name: panImageName,
+        type: 'image/jpeg', // Adjust according to your image type
+      });
+    }
+
+    let data = await submitLoanForm(formdata);
+    // console.log('submit form response >>>>>>', data);
+    if (data.result) {
+      setTimeout(() => {
+        setLoader(false);
+        Toast.show({
+          type: 'success',
+          text1: 'Successfully submitted',
+          text2: `${data.message}`,
+          text1Style: {
+            fontSize: responsiveFontSize(2),
+            fontWeight: '700',
+            color: 'green',
+          },
+          text2Style: {
+            fontSize: responsiveFontSize(1.8),
+            fontWeight: '500',
+            color: 'black',
+          },
+        });
+      }, 2000);
+    } else if (data.errors) {
+      setLoader(false);
+      setTimeout(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to submit',
+          text2: `${
+            data.errors.contact_person
+              ? data.errors.contact_person[0]
+              : data.errors.current_fy
+              ? data.errors.contact_person[0]
+              : data.errors.date_of_corporate
+              ? data.errors.date_of_corporate[0]
+              : data.errors.email
+              ? data.errors.email[0]
+              : data.errors.firm_name
+              ? data.errors.firm_name[0]
+              : data.errors.img
+              ? data.errors.img[0]
+              : data.errors.last_fy
+              ? data.errors.last_fy[0]
+              : data.errors.loan_required
+              ? data.errors.loan_required[0]
+              : data.errors.mobile
+              ? data.errors.mobile[0]
+              : data.errors.pan_image
+              ? data.errors.pan_image[0]
+              : data.errors.pan_number
+              ? data.errors.pan_number[0]
+              : data.errors.loan_category
+              ? data.errors.loan_category[0]
+              : data.errors.message
+          }`,
+          text1Style: {
+            fontSize: responsiveFontSize(2),
+            fontWeight: '700',
+            color: 'red',
+          },
+          text2Style: {
+            fontSize: responsiveFontSize(1.8),
+            fontWeight: '500',
+            color: 'black',
+          },
+        });
+        setLoader(false);
+      }, 1000);
+    } else {
+      setLoader(false);
     }
   };
 
@@ -188,6 +287,8 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter mobile no."
           onChangeText={text => setMobile(text)}
           style={styles.textInput}
+          keyboardType="number-pad"
+          maxLength={10}
         />
         {/* <RadioGroup
           radioButtons={gender}
@@ -220,7 +321,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Date of Incorporation <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter date of incorporation"
+          placeholder="enter date dd/mm/yyyy formate"
           style={styles.textInput}
           onChangeText={text => setDate_Of_Corporate(text)}
         />
@@ -234,6 +335,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter pancard no."
           onChangeText={text => setPan_Number(text)}
           style={styles.textInput}
+          maxLength={10}
         />
       </View>
 
@@ -318,14 +420,24 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
           Photo/Selfie <Text style={{color: 'red'}}>*</Text>
         </Text>
-
-        <TouchableOpacity onPress={selectSelfie} style={styles.selectPhoto}>
-          <Font5
-            name="camera"
-            size={responsiveWidth(12)}
-            color={COLORS.Primary}
-          />
-        </TouchableOpacity>
+        {img ? (
+          <TouchableOpacity onPress={selectSelfie} style={styles.selectPhoto}>
+            <Font5
+              name="check-circle"
+              size={responsiveWidth(12)}
+              color={'green'}
+            />
+            <Text style={styles.selectedImgText}>image is selected</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={selectSelfie} style={styles.selectPhoto}>
+            <Font5
+              name="camera"
+              size={responsiveWidth(12)}
+              color={COLORS.Primary}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* pan card photo */}
@@ -333,13 +445,24 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
           Pan Card Photo <Text style={{color: 'red'}}>*</Text>
         </Text>
-        <TouchableOpacity onPress={selectPanPhoto} style={styles.selectPhoto}>
-          <Font5
-            name="camera"
-            size={responsiveWidth(12)}
-            color={COLORS.Primary}
-          />
-        </TouchableOpacity>
+        {pan_image ? (
+          <TouchableOpacity onPress={selectPanPhoto} style={styles.selectPhoto}>
+            <Font5
+              name="check-circle"
+              size={responsiveWidth(12)}
+              color={'green'}
+            />
+            <Text style={styles.selectedImgText}>image is selected</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={selectPanPhoto} style={styles.selectPhoto}>
+            <Font5
+              name="camera"
+              size={responsiveWidth(12)}
+              color={COLORS.Primary}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Adhar card */}
@@ -360,7 +483,11 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
         <TouchableOpacity
           onPress={handleSumbitLoanForm}
           style={styles.formButton}>
-          <Text style={styles.buttonText}>Submit</Text>
+          {loader ? (
+            <ActivityIndicator size={'large'} color={'white'} />
+          ) : (
+            <Text style={styles.buttonText}>Submit</Text>
+          )}
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -427,5 +554,10 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.2),
     color: 'white',
     fontWeight: '700',
+  },
+  selectedImgText: {
+    fontSize: responsiveScreenFontSize(1.8),
+    marginVertical: responsiveWidth(2),
+    color: 'green',
   },
 });

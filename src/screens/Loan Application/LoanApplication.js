@@ -6,17 +6,22 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   responsiveFontSize,
   responsiveWidth,
   responsiveHeight,
+  responsiveScreenFontSize,
 } from 'react-native-responsive-dimensions';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import Font6 from 'react-native-vector-icons/FontAwesome6';
 import {COLORS} from '../../themes/COLORS';
+import {getLoanApplication} from '../../Hooks/getLoanApplication';
+import {useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 
 const LoanApplication = () => {
+  const [applications, setApplications] = useState([]);
   const Loan_Status = [
     {
       id: 1,
@@ -44,6 +49,22 @@ const LoanApplication = () => {
       Status: 'Active',
     },
   ];
+
+  let details = useSelector(state => state.ReduxStore.localstorageUserDetails);
+  useFocusEffect(
+    React.useCallback(() => {
+      allAvailableLoanApplications();
+    }, []),
+  );
+
+  const allAvailableLoanApplications = async () => {
+    let payload = {
+      user_id: details.user_id,
+    };
+    let data = await getLoanApplication(payload);
+    setApplications(data);
+    // console.log();
+  };
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <View
@@ -84,32 +105,56 @@ const LoanApplication = () => {
         style={{
           flex: 12,
           // backgroundColor:'red',
-          alignItems: 'center',
+          // alignItems: 'center',
           marginTop: responsiveHeight(5),
         }}>
-        <FlatList
-          data={Loan_Status}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            return (
-              <View style={styles.applicationContainer}>
-                <View style={styles.loanProductContainer}>
-                  <Text style={styles.loanProductText}>Loan Product</Text>
-                  <Text style={styles.loanProductStatusText}>Status</Text>
-                </View>
+        {applications.length > 0 ? (
+          <View style={{flex: 1, alignItems: 'center'}}>
+            <FlatList
+              data={applications}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.applicationContainer}>
+                    <View style={styles.loanProductContainer}>
+                      <Text style={styles.loanProductText}>Loan Product</Text>
+                      <Text style={styles.loanProductStatusText}>Status</Text>
+                    </View>
 
-                <View style={styles.nameContainer}>
-                  <Text style={styles.loanProductStatusText}>
-                    {item.Applicant_name}
-                  </Text>
-                  <Text style={styles.loanProductStatusText}>
-                    {item.Status}
-                  </Text>
-                </View>
-              </View>
-            );
-          }}
-        />
+                    <View style={styles.nameContainer}>
+                      <Text style={styles.loanProductStatusText}>
+                        {item.loan_category}
+                      </Text>
+
+                      {item.status === 'pending' && (
+                        <Text style={styles.loanProductStatusPendingText}>
+                          {item.status}
+                        </Text>
+                      )}
+                      {item.status === 'success' && (
+                        <Text style={styles.loanProductStatusSuccessText}>
+                          {item.status}
+                        </Text>
+                      )}
+                      {item.status === 'reject' && (
+                        <Text style={styles.loanProductStatusRejectText}>
+                          {item.status}
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                );
+              }}
+            />
+          </View>
+        ) : (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={styles.noApplicationFoundText}>
+              No ApplicationAvailable
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -152,16 +197,37 @@ const styles = StyleSheet.create({
   },
   loanProductText: {
     fontSize: responsiveFontSize(2),
-    color: COLORS.black,
+    color: COLORS.Primary,
     fontWeight: '700',
+  },
+  loanProductStatusPendingText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '600',
+    color: 'orange',
+  },
+  loanProductStatusSuccessText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '600',
+    color: 'green',
+  },
+  loanProductStatusRejectText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '600',
+    color: 'red',
   },
   loanProductStatusText: {
     fontSize: responsiveFontSize(2),
+    fontWeight: '600',
     color: COLORS.black,
   },
   nameContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     paddingHorizontal: responsiveWidth(3),
+  },
+  noApplicationFoundText: {
+    fontSize: responsiveScreenFontSize(2.2),
+    color: COLORS.Primary,
+    fontWeight: '700',
   },
 });

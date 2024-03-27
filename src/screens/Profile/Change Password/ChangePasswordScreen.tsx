@@ -82,6 +82,7 @@ const ChangePasswordScreen: React.FC = () => {
               style={styles.inputeViewStyle}
               placeholder="enter your email"
               onChangeText={text => setEmail(text)}
+              placeholderTextColor={"gray"}
               // placeholderTextColor={COLORS.black}
             />
 
@@ -90,6 +91,7 @@ const ChangePasswordScreen: React.FC = () => {
               placeholder="enter password"
               onChangeText={text => setOldPassword(text)}
               maxLength={6}
+              placeholderTextColor={"gray"}
               // placeholderTextColor={COLORS.black}
             />
 
@@ -98,6 +100,7 @@ const ChangePasswordScreen: React.FC = () => {
               placeholder="enter new password"
               onChangeText={text => setNewPassword(text)}
               maxLength={6}
+              placeholderTextColor={"gray"}
               // placeholderTextColor={COLORS.black}
               secureTextEntry // Toggle password visibility
             />
@@ -137,14 +140,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoView: {
-    borderWidth: responsiveWidth(0.5),
-    borderColor: COLORS.Primary,
+    // borderWidth: responsiveWidth(0.5),
+    // borderColor: COLORS.Primary,
     width: responsiveWidth(38),
     height: responsiveWidth(38),
     borderRadius: responsiveWidth(19),
     justifyContent: 'center',
     alignItems: 'center',
-    borderStyle: 'dotted',
+    // borderStyle: 'dotted',
   },
   Heading: {
     fontSize: responsiveFontSize(4),
@@ -168,6 +171,7 @@ const styles = StyleSheet.create({
     borderWidth: responsiveWidth(0.2),
     marginVertical: responsiveScreenWidth(1),
     fontSize: responsiveFontSize(2),
+    color:"black"
   },
   buttonContainer: {
     width: responsiveScreenWidth(100),

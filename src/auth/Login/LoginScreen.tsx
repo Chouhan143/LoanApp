@@ -30,12 +30,11 @@ import {ActivityIndicator} from 'react-native';
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 
 const LoginScreen: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<NavigationProps>();
   const [loader, setLoader] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(true);
   const handleSignupPress = () => {
     navigation.navigate('signUpScreen');
   };
@@ -81,17 +80,17 @@ const LoginScreen: React.FC = () => {
       });
 
       // navigation based on role
-      // console.log(data.data.role);
+      console.log(data.data.role);
 
       switch (data.data.role) {
-        case 'Customer':
+        case 'customer':
           navigation.navigate('homeScreen');
           break;
-        case 'Partner':
+        case 'partner':
           console.log('navigate to partner');
           navigation.navigate('bottomTab');
           break;
-        case 'Associate':
+        case 'associate':
           navigation.navigate('bottomTab');
           break;
         default:
@@ -143,7 +142,7 @@ const LoginScreen: React.FC = () => {
         <View style={styles.logoView}>
           <Image
             source={require('../../assets/logo.png')}
-            style={{width: responsiveWidth(28), height: responsiveWidth(28)}}
+            style={{width: responsiveWidth(38), height: responsiveWidth(38)}}
           />
         </View>
       </View>
@@ -156,17 +155,36 @@ const LoginScreen: React.FC = () => {
         }}>
         <View style={styles.inputFormContainer}>
           <Text style={styles.Heading}>Sign In</Text>
-          <TextInput
-            style={styles.inputeViewStyle}
-            placeholder="enter email here"
-            onChangeText={text => setEmail(text)}
-          />
-          <TextInput
-            style={styles.inputeViewStyle}
-            placeholder="enter 6 digit password "
-            // maxLength={6}
-            onChangeText={text => setPassword(text)}
-          />
+          <View style={styles.inputeViewStyle}>
+            <TextInput
+              placeholder="email"
+              placeholderTextColor={'gray'}
+              onChangeText={text => setEmail(text)}
+              style={styles.inputStyle}
+            />
+          </View>
+
+          <View style={styles.inputeViewStyle}>
+            <View style={{flex: 5}}>
+              <TextInput
+                placeholder="password "
+                placeholderTextColor={'gray'}
+                secureTextEntry={showPassword}
+                style={styles.inputStyle}
+                // maxLength={6}
+                onChangeText={text => setPassword(text)}
+              />
+            </View>
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={styles.eyeButton}>
+              {showPassword ? (
+                <FontAwesome5 name="eye-slash" size={20} color={'black'} />
+              ) : (
+                <FontAwesome5 name="eye" size={20} color={'black'} />
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -233,14 +251,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoView: {
-    borderWidth: responsiveWidth(0.5),
-    borderColor: COLORS.Primary,
-    width: responsiveWidth(38),
-    height: responsiveWidth(38),
+    // borderWidth: responsiveWidth(0.5),
+    // borderColor: COLORS.Primary,
+    width: responsiveWidth(40),
+    height: responsiveWidth(40),
     borderRadius: responsiveWidth(19),
     justifyContent: 'center',
     alignItems: 'center',
-    borderStyle: 'dotted',
+    // borderStyle: 'dotted',
   },
   Heading: {
     fontSize: responsiveFontSize(4),
@@ -249,6 +267,8 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(2),
     margin: responsiveWidth(3),
     color: COLORS.Secondry,
+    // justifyContent:"flex-start"
+    alignSelf: 'flex-start',
   },
   inputFormContainer: {
     flex: 1.5,
@@ -265,8 +285,14 @@ const styles = StyleSheet.create({
     borderWidth: responsiveWidth(0.2),
     marginVertical: responsiveWidth(3),
     fontSize: responsiveFontSize(2),
+    color: 'black',
+    flexDirection: 'row',
   },
-
+  inputStyle: {
+    flex:1,
+    color:"black",
+    fontSize: responsiveFontSize(2),
+  },
   loginBtn: {
     width: responsiveWidth(90),
     height: responsiveHeight(6),
@@ -281,4 +307,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: responsiveHeight(1),
   },
+  eyeButton: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 });

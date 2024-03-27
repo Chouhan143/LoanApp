@@ -154,14 +154,14 @@ const styles = StyleSheet.create({
     marginVertical: responsiveWidth(3),
   },
   logoView: {
-    borderWidth: responsiveWidth(0.5),
-    borderColor: COLORS.Primary,
+    // borderWidth: responsiveWidth(0.5),
+    // borderColor: COLORS.Primary,
     width: responsiveWidth(38),
     height: responsiveWidth(38),
     borderRadius: responsiveWidth(19),
     justifyContent: 'center',
     alignItems: 'center',
-    borderStyle: 'dotted',
+    // borderStyle: 'dotted',
   },
   Heading: {
     fontSize: responsiveFontSize(4),

@@ -18,7 +18,7 @@ import UserICon from 'react-native-vector-icons/FontAwesome';
 import Font5 from 'react-native-vector-icons/FontAwesome5';
 import {COLORS} from '../../themes/COLORS';
 import {SelectList} from 'react-native-dropdown-select-list';
-import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
+// import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import {useNavigation} from '@react-navigation/native';
 import {LoanFormProps, submitLoanForm} from '../../Hooks/submitLoanForm';
 import DocumentPicker from 'react-native-document-picker';
@@ -49,41 +49,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
     state => state.ReduxStore.localstorageUserDetails,
   );
   const navigation = useNavigation<NavigationProps>();
-  // console.log('user_id',user_id);
 
-  // console.log('loan type', selectedLoan);
-
-  // const gender = useMemo(
-  //   () => [
-  //     {
-  //       id: '1', // acts as primary key, should be unique and non-empty string
-  //       label: 'Male',
-  //       value: 'option1',
-  //     },
-  //     {
-  //       id: '2',
-  //       label: 'Female',
-  //       value: 'option2',
-  //     },
-  //   ],
-  //   [],
-  // );
-
-  // const marital_Status = useMemo(
-  //   () => [
-  //     {
-  //       id: '1', // acts as primary key, should be unique and non-empty string
-  //       label: 'Married',
-  //       value: 'option1',
-  //     },
-  //     {
-  //       id: '2',
-  //       label: 'Unmarried',
-  //       value: 'option2',
-  //     },
-  //   ],
-  //   [],
-  // );
 
   const handleSumbitLoanForm = async () => {
     setLoader(true);
@@ -120,7 +86,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
     // formdata.append('code', details.code);
 
     // console.log("loan category",selectedLoan);
-    
+
     // Append image URIs
     if (img) {
       const imgName = img.split('/').pop(); // Get image name from URI
@@ -265,6 +231,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter campany name"
           onChangeText={text => setFirm_name(text)}
           style={styles.textInput}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -276,6 +243,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter contact person"
           style={styles.textInput}
           onChangeText={text => setContact_Person(text)}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -289,6 +257,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           style={styles.textInput}
           keyboardType="number-pad"
           maxLength={10}
+          placeholderTextColor={'gray'}
         />
         {/* <RadioGroup
           radioButtons={gender}
@@ -306,6 +275,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter email id"
           onChangeText={text => setEmail(text)}
           style={styles.textInput}
+          placeholderTextColor={'gray'}
         />
         {/* <RadioGroup
           radioButtons={marital_Status}
@@ -324,6 +294,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter date dd/mm/yyyy formate"
           style={styles.textInput}
           onChangeText={text => setDate_Of_Corporate(text)}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -336,6 +307,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           onChangeText={text => setPan_Number(text)}
           style={styles.textInput}
           maxLength={10}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -347,6 +319,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter gst no."
           onChangeText={text => setGst_Number(text)}
           style={styles.textInput}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -370,6 +343,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter current FY sales tax"
           style={styles.textInput}
           onChangeText={text => setCurrent_Fy(text)}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -401,6 +375,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter last FY IT return"
           style={styles.textInput}
           onChangeText={text => setLast_Fy(text)}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -412,6 +387,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           placeholder="enter loan requirement"
           style={styles.textInput}
           onChangeText={text => setLoan_Required(text)}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -513,6 +489,7 @@ const styles = StyleSheet.create({
     borderWidth: responsiveWidth(0.3),
     borderRadius: responsiveWidth(2),
     fontSize: responsiveFontSize(2),
+    color: 'black',
   },
   headingText: {
     fontSize: responsiveFontSize(3.5),

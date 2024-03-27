@@ -6,6 +6,8 @@ import {
   View,
   BackHandler,
   ActivityIndicator,
+  Image,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -20,7 +22,7 @@ import MenuIcon from 'react-native-vector-icons/Entypo';
 import Font6 from 'react-native-vector-icons/FontAwesome6';
 import Carousel from '../../components/Carousel';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {ScrollView} from 'react-native-virtualized-view';
 import styles from './styles';
@@ -30,6 +32,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {addLocalStorageUserDetails} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
 import {fetchSliderImages} from '../../Hooks/fetchSliderImages';
+import Toast from 'react-native-toast-message';
+import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
 
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 type LocalStorageDetailsProps = {
@@ -38,13 +42,15 @@ type LocalStorageDetailsProps = {
   status: string;
   user_id: number;
   user_name: string;
-  varified: number;
+  is_verify: number;
+  img?: string;
 };
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
   const [details, setDetails] = useState<LocalStorageDetailsProps | null>();
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
 
   const LoanList = [
@@ -105,29 +111,36 @@ const HomeScreen: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    setLoading(true);
-    getUserDetails();
-    AsyncStorage.setItem('loginStatus', JSON.stringify(true));
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    BackHandler.addEventListener('hardwareBackPress', backHandler);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backHandler);
-    };
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true);
+      getUserDetails();
+      AsyncStorage.setItem('loginStatus', JSON.stringify(true));
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
+      BackHandler.addEventListener('hardwareBackPress', backHandler);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', backHandler);
+      };
+    }, []),
+  );
 
   const getUserDetails = async () => {
     let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
       'loginUserDetails',
     ).then((data: string | null) => (data ? JSON.parse(data) : null));
-    setDetails(details);
     dispatch(addLocalStorageUserDetails(details));
     // console.log('user details from local storage>>>>>', details);
-  };
 
-  // let url = fetchSliderImages()
+    // fetch complete user details based on user id
+    let payload = {
+      user_id: details?.user_id,
+    };
+    let data = await fetchUserDetails(payload);
+    setDetails(data);
+    // console.log('user details from api >>>>>', data);
+  };
 
   const backHandler = () => {
     if (navigation.isFocused()) {
@@ -148,8 +161,48 @@ const HomeScreen: React.FC = () => {
     }
   };
 
+  const handleLoanCategoryClick = () => {
+    // console.log('user details >>>>',details?.is_verify);
+    if (details?.is_verify == 0) {
+      Toast.show({
+        type: 'error',
+        text1: 'Verify Email',
+        text2: 'Please verify your email to apply for loan',
+        text1Style: {
+          fontSize: responsiveFontSize(2),
+          fontWeight: '700',
+          color: 'red',
+        },
+        text2Style: {
+          fontSize: responsiveFontSize(1.8),
+          fontWeight: '500',
+          color: 'black',
+        },
+      });
+      navigation.navigate('emailVerification');
+    } else if (details?.is_verify == 1) {
+      navigation.navigate('loanFormScreen');
+    }
+    // navigation.navigate('loanFormScreen');
+  };
+
+  const onRefresh = React.useCallback(() => {
+    // setLoading(true);
+    setRefreshing(true);
+    getUserDetails();
+    setTimeout(() => {
+      // setLoading(false);
+      setRefreshing(false);
+    }, 400);
+  }, []);
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+      }
+      style={styles.container}
+      showsVerticalScrollIndicator={false}>
       {loading ? (
         <View
           style={[
@@ -160,41 +213,30 @@ const HomeScreen: React.FC = () => {
         </View>
       ) : (
         <View>
+          {/* header container */}
           <View style={styles.header}>
             <TouchableOpacity
               onPress={() => navigation.navigate('userProfile')}
               style={styles.userImg}>
-              <Font6
-                name={'circle-user'}
-                size={responsiveFontSize(4.5)}
-                color={COLORS.white}
-              />
+              {details?.img ? (
+                <Image source={{uri: details?.img}} style={styles.userImg} />
+              ) : (
+                <Image
+                  source={require('../../assets/profile.png')}
+                  style={styles.userImg}
+                />
+              )}
             </TouchableOpacity>
 
-            <Text
-              style={{
-                // alignSelf:'flex-start',
-                textAlign: 'center',
-                position: 'absolute',
-                left: 60,
-                fontSize: responsiveFontSize(2.8),
-                color: 'black',
-                fontWeight: '700',
-              }}>
-              {details?.user_name}
-            </Text>
-
-            <MenuIcon
-              name={'menu'}
-              size={responsiveFontSize(4)}
-              color={COLORS.black}
-            />
+            <Text style={styles.userName}>{details?.name}</Text>
           </View>
+
           {/* Carosel */}
           <View style={{width: responsiveWidth(96), alignSelf: 'center'}}>
             <Carousel />
           </View>
-          {/* Loan Produt */}
+
+          {/* Loan Product */}
           <View style={{backgroundColor: 'white', alignItems: 'center'}}>
             <Text style={styles.loanProductText}>Loan Products</Text>
             <FlatList
@@ -202,7 +244,7 @@ const HomeScreen: React.FC = () => {
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('loanFormScreen')}
+                    onPress={handleLoanCategoryClick}
                     style={styles.itemContainer}>
                     <MaterialIcons
                       name={`${item.icon}`}

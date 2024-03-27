@@ -19,16 +19,13 @@ export default function UserRoleTab() {
     <View
       style={{
         flex: 1,
-        // width: responsiveScreenWidth(100),
-        // height: responsiveScreenHeight(100),
-        // backgroundColor: 'red',
       }}>
       {/* app logo container */}
       <View style={{backgroundColor: COLORS.white}}>
         <View style={styles.imageConatiner}>
           <Image
             source={logo}
-            style={{width: responsiveWidth(20), height: responsiveWidth(20)}}
+            style={{width: responsiveWidth(25), height: responsiveWidth(25)}}
           />
         </View>
         <Text
@@ -111,14 +108,14 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(2),
   },
   imageConatiner: {
-    borderWidth: responsiveWidth(0.5),
+    // borderWidth: responsiveWidth(0.5),
     borderColor: COLORS.Primary,
-    width: responsiveWidth(28),
-    height: responsiveWidth(28),
+    width: responsiveWidth(30),
+    height: responsiveWidth(30),
     borderRadius: responsiveWidth(14),
     justifyContent: 'center',
     alignItems: 'center',
-    borderStyle: 'dotted',
+    // borderStyle: 'dotted',
     alignSelf: 'center',
     marginVertical: responsiveHeight(2),
   },

@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(2),
     paddingLeft: responsiveWidth(2),
     fontSize: responsiveScreenFontSize(2),
-    marginVertical:responsiveScreenWidth(3)
+    marginVertical:responsiveScreenWidth(3),
+    color:'black'
   },
   loginBtn: {
     width: responsiveWidth(92),

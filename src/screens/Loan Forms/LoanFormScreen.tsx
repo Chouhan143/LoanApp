@@ -5,8 +5,9 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   responsiveFontSize,
   responsiveWidth,
@@ -16,35 +17,48 @@ import MenuIcon from 'react-native-vector-icons/Entypo';
 import Font6 from 'react-native-vector-icons/FontAwesome6';
 import {COLORS} from '../../themes/COLORS';
 import {SelectList} from 'react-native-dropdown-select-list';
-import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import {useNavigation} from '@react-navigation/native';
-import PersonalLoan from './PersonalLoan';
-import BusinessLoan from './BusinessLoan';
-import CarLoan from './CarLoan';
 import {StackNavigationPropList} from '../../navigation/Navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LoanForm from './LoanForm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
 
 type NavigationProps = StackNavigationProp<
   StackNavigationPropList,
   'userProfile'
 >;
 
+type LocalStorageDetailsProps = {
+  email: string;
+  role: string;
+  status: string;
+  user_id: number;
+  user_name: string;
+  is_verify: number;
+  img?: string;
+};
+
 const LoanFormScreen = () => {
   const [selected, setSelected] = useState<string>('');
   const navigation = useNavigation<NavigationProps>();
+  const [details, setDetails] = useState<LocalStorageDetailsProps | null>();
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
 
   const data = [
-    {key: 1, value: 'Personal loan'},
-    {key: 2, value: 'Business Loan'},
-    {key: 3, value: 'Car Loan'},
-    {key: 4, value: 'Education Loan'},
-    {key: 5, value: 'MSME Loan'},
-    {key: 6, value: 'Home Loan'},
-    {key: 7, value: 'Project Loan'},
-    {key: 8, value: 'Working Capital Loan'},
-    {key: 9, value: 'Loan Against Property'},
-    {key: 10, value: 'CV-CE Loan'},
+    {key: 1, value: 'Education Loan'},
+    {key: 2, value: 'Personal Loan'},
+    {key: 3, value: 'MSME Loan'},
+    {key: 4, value: 'Home Loan'},
+    {key: 5, value: 'Business Loan'},
+    {key: 6, value: 'Project Loan'},
+    {key: 7, value: 'Working Capital Loan'},
+    {key: 8, value: 'Loan Against Property'},
+    {key: 9, value: 'CV-CE Loan'},
+    {key: 10, value: 'Car Loan'},
     {key: 11, value: 'Gold Loan'},
   ];
 
@@ -52,40 +66,51 @@ const LoanFormScreen = () => {
     setSelected(val);
   };
 
-  // console.log(selected);
-  // radio button
+  const getUserDetails = async () => {
+    let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
+      'loginUserDetails',
+    ).then((data: string | null) => (data ? JSON.parse(data) : null));
 
-  const gender = useMemo(
-    () => [
-      {
-        id: '1', // acts as primary key, should be unique and non-empty string
-        label: 'Male',
-        value: 'option1',
-      },
-      {
-        id: '2',
-        label: 'Female',
-        value: 'option2',
-      },
-    ],
-    [],
-  );
+    // fetch complete user details based on user id
+    let payload = {
+      user_id: details?.user_id,
+    };
+    let data = await fetchUserDetails(payload);
+    setDetails(data);
+    // console.log('user details from api >>>>>', data);
+  };
 
-  const marital_Status = useMemo(
-    () => [
-      {
-        id: '1', // acts as primary key, should be unique and non-empty string
-        label: 'Married',
-        value: 'option1',
-      },
-      {
-        id: '2',
-        label: 'Unmarried',
-        value: 'option2',
-      },
-    ],
-    [],
-  );
+  // const gender = useMemo(
+  //   () => [
+  //     {
+  //       id: '1', // acts as primary key, should be unique and non-empty string
+  //       label: 'Male',
+  //       value: 'option1',
+  //     },
+  //     {
+  //       id: '2',
+  //       label: 'Female',
+  //       value: 'option2',
+  //     },
+  //   ],
+  //   [],
+  // );
+
+  // const marital_Status = useMemo(
+  //   () => [
+  //     {
+  //       id: '1', // acts as primary key, should be unique and non-empty string
+  //       label: 'Married',
+  //       value: 'option1',
+  //     },
+  //     {
+  //       id: '2',
+  //       label: 'Unmarried',
+  //       value: 'option2',
+  //     },
+  //   ],
+  //   [],
+  // );
 
   return (
     <ScrollView
@@ -96,18 +121,15 @@ const LoanFormScreen = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate('userProfile')}
           style={styles.userImg}>
-          <Font6
-            name={'circle-user'}
-            size={responsiveFontSize(4.5)}
-            color={COLORS.white}
-          />
+          {details?.img ? (
+            <Image source={{uri: details?.img}} style={styles.userImg} />
+          ) : (
+            <Image
+              source={require('../../assets/profile.png')}
+              style={styles.userImg}
+            />
+          )}
         </TouchableOpacity>
-{/* 
-        <MenuIcon
-          name={'menu'}
-          size={responsiveFontSize(4)}
-          color={COLORS.black}
-        /> */}
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -149,9 +171,9 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveWidth(3),
   },
   userImg: {
-    width: responsiveWidth(10),
-    height: responsiveWidth(10),
-    borderRadius: responsiveWidth(5),
+    width: responsiveWidth(14),
+    height: responsiveWidth(14),
+    borderRadius: responsiveWidth(14),
     backgroundColor: COLORS.graylight,
     justifyContent: 'center',
     alignItems: 'center',

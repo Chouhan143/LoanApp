@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 // import {request, PERMISSIONS} from 'react-native-permissions';
 import {useNavigation} from '@react-navigation/native';
 // import {useSelector, useDispatch} from 'react-redux';
@@ -210,14 +209,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoView: {
-    borderWidth: responsiveWidth(0.5),
-    borderColor: COLORS.Primary,
+    // borderWidth: responsiveWidth(0.5),
+    // borderColor: COLORS.Primary,
     width: responsiveWidth(38),
     height: responsiveWidth(38),
     borderRadius: responsiveWidth(19),
     justifyContent: 'center',
     alignItems: 'center',
-    borderStyle: 'dotted',
+    // borderStyle: 'dotted',
   },
   image: {
     width: responsiveWidth(80),

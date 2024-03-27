@@ -5,6 +5,7 @@ import {
   responsiveHeight,
   responsiveScreenFontSize,
   responsiveScreenHeight,
+  responsiveScreenWidth,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {COLORS} from '../themes/COLORS';
@@ -68,6 +69,7 @@ const SplaceScreen = () => {
         <View style={styles.triangelContainer}>
           <View style={styles.triangleBottomRight} />
         </View> */}
+
       </View>
     </View>
   );
@@ -78,7 +80,8 @@ export default SplaceScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f8fa',
+    backgroundColor: 'white',
+    // backgroundColor: '#f5f8fa',
   },
   logoContainer: {
     borderWidth: responsiveWidth(0.5),
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderStyle: 'dotted',
-    backgroundColor:"white"
+    backgroundColor: 'white',
   },
   triangelContainer: {
     alignItems: 'center',
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'space-between',
     // backgroundColor: 'purple',
   },

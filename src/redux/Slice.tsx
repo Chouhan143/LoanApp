@@ -5,6 +5,7 @@ const slice = createSlice({
   initialState: {
     registrationData: {},
     localstorageUserDetails: {},
+    screenName:[]
   },
   reducers: {
     addRegistrationData: (state, action) => {
@@ -16,6 +17,9 @@ const slice = createSlice({
     clearLocalStorageUserDetails: (state, action) => {
       state.localstorageUserDetails = {};
     },
+    addScreenName:(state,action)=>{
+      state.screenName = state.screenName.push(action.payload)
+    }
   },
 });
 
@@ -23,5 +27,6 @@ export const {
   addRegistrationData,
   addLocalStorageUserDetails,
   clearLocalStorageUserDetails,
+  addScreenName
 } = slice.actions;
 export default slice.reducer;

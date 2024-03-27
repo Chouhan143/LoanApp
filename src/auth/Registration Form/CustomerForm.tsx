@@ -18,7 +18,7 @@ import {
   responsiveScreenHeight,
   responsiveScreenWidth,
 } from 'react-native-responsive-dimensions';
-import {addRegistrationData} from '../../redux/Slice';
+import {addLocalStorageUserDetails, addRegistrationData} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
 type NavigationProps = StackNavigationProp<
   StackNavigationPropList,
@@ -42,8 +42,7 @@ const CustomerForm = () => {
       mobile: phone,
       password: password,
       location: location,
-      address: address,
-      role: "customer",
+      role: 'customer',
     };
     // console.log("payload >>>",details);
 
@@ -66,7 +65,7 @@ const CustomerForm = () => {
           color: 'black',
         },
       });
-      navigation.navigate('emailVerification');
+      navigation.navigate('emailVerification',{screenName:"register"});
     } else {
       Toast.show({
         type: 'error',
@@ -111,6 +110,7 @@ const CustomerForm = () => {
             style={styles.inputFiled}
             onChangeText={text => setName(text)}
             placeholder="enter your name"
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
@@ -118,27 +118,32 @@ const CustomerForm = () => {
             placeholder="enter phone no."
             keyboardType="number-pad"
             maxLength={10}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setEmail(text)}
             placeholder="enter your email"
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setPassword(text)}
             placeholder="create password"
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setLocation(text)}
             placeholder="enter your location"
+            placeholderTextColor={'gray'}
           />
-          <TextInput
+          {/* <TextInput
             style={styles.inputFiled}
             onChangeText={text => setAddress(text)}
             placeholder="enter your address"
-          />
+            placeholderTextColor={'gray'}
+          /> */}
         </View>
 
         {/* button  */}

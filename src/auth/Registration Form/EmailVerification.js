@@ -18,7 +18,7 @@ import {
 import logo from '../../assets/logo.png';
 import {COLORS} from '../../themes/COLORS';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {BaseUrl} from '../../constant/BaseUrl';
 import {verifyEmail} from '../../Hooks/verifyEmail';
@@ -28,12 +28,18 @@ import {ActivityIndicator} from 'react-native';
 const EmailVerification = () => {
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
+  const route = useRoute();
 
-  const email = useSelector(state =>
-    state.ReduxStore.localstorageUserDetails.email
-      ? state.ReduxStore.localstorageUserDetails.email
-      : state.ReduxStore.registrationData?.user.email,
-  );
+  // let screenName = useSelector(state => state.ReduxStore.screenName);
+  let screenName = route.params.screenName;
+  if (screenName == 'register') {
+    email = useSelector(state => state.ReduxStore.registrationData.user.email);
+  } else {
+    email = useSelector(
+      state => state.ReduxStore.localstorageUserDetails.email,
+    );
+  }
+  // console.log(screenName);
 
   // const userEmail = useSelector(
   //   // state => state.ReduxStore.registrationData,
@@ -47,6 +53,7 @@ const EmailVerification = () => {
   const handleProceedClick = async () => {
     setLoader(true);
     let data = await verifyEmail(email);
+    console.log(data);
     if (data.result) {
       setLoader(false);
       Toast.show({
@@ -67,6 +74,7 @@ const EmailVerification = () => {
 
       navigation.navigate('otpScreen');
     } else {
+      setLoader(false);
       Toast.show({
         type: 'error',
         text1: 'Failed to sent OTP',
@@ -112,6 +120,7 @@ const EmailVerification = () => {
               style={styles.inputeViewStyle}
               value={email ? email : email}
               placeholder="name@example.com"
+              placeholderTextColor={'gray'}
               // placeholderTextColor={COLORS.black}a
             />
           </View>
@@ -170,14 +179,14 @@ const styles = StyleSheet.create({
     marginVertical: responsiveWidth(3),
   },
   logoView: {
-    borderWidth: responsiveWidth(0.5),
-    borderColor: COLORS.Primary,
+    // borderWidth: responsiveWidth(0.5),
+    // borderColor: COLORS.Primary,
     width: responsiveWidth(38),
     height: responsiveWidth(38),
     borderRadius: responsiveWidth(19),
     justifyContent: 'center',
     alignItems: 'center',
-    borderStyle: 'dotted',
+    // borderStyle: 'dotted',
   },
   Heading: {
     fontSize: responsiveFontSize(4),

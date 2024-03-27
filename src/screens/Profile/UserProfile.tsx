@@ -1,6 +1,7 @@
 import {
   Alert,
   BackHandler,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,6 +18,7 @@ import UserICon from 'react-native-vector-icons/FontAwesome';
 import Security from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {NavigationProps} from '../../navigation/Navigation';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -63,7 +65,7 @@ const UserProfile: React.FC = () => {
         text: 'logout',
         onPress: async () => {
           await AsyncStorage.clear();
-          // dispatch(clearLocalStorageUserDetails({}));
+          dispatch(clearLocalStorageUserDetails({}));
           navigation.navigate('loginScreen');
 
           BackHandler.exitApp();
@@ -87,7 +89,7 @@ const UserProfile: React.FC = () => {
           navigation.navigate('bottomTab');
           break;
         default:
-          // navigation.navigate('loginScreen');
+          navigation.navigate('homeScreen');
           break;
       }
       return true;
@@ -101,11 +103,14 @@ const UserProfile: React.FC = () => {
       {/* profile image container  */}
       <View style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
-          <FontAwesome6
-            name={'circle-user'}
-            size={responsiveFontSize(14)}
-            color={COLORS.white}
-          />
+          {userDetails.img ? (
+            <Image source={{uri: userDetails.img}} style={styles.userImgIcon} />
+          ) : (
+            <Image
+              source={require('../../assets/profile.png')}
+              style={styles.userImgIcon}
+            />
+          )}
         </View>
         <View style={{alignItems: 'center', marginTop: responsiveHeight(1)}}>
           <Text
@@ -135,7 +140,7 @@ const UserProfile: React.FC = () => {
           <UserICon
             name={'user-circle-o'}
             size={responsiveFontSize(3.5)}
-            color={COLORS.black}
+            color={'gray'}
           />
           <Text style={styles.serviceText}>Personal Information</Text>
         </TouchableOpacity>
@@ -146,18 +151,20 @@ const UserProfile: React.FC = () => {
           <Security
             name={'security'}
             size={responsiveFontSize(3.5)}
-            color={COLORS.black}
+            color={'gray'}
           />
           <Text style={styles.serviceText}>Change Password</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('emailVerification')}
+          onPress={() =>
+            navigation.navigate('emailVerification', {screenName: ''})
+          }
           style={styles.userView}>
-          <Security
-            name={'security'}
+          <MaterialCommunityIcon
+            name={'email-check'}
             size={responsiveFontSize(3.5)}
-            color={COLORS.black}
+            color={'gray'}
           />
           <Text style={styles.serviceText}>Verify Email</Text>
         </TouchableOpacity>
@@ -173,7 +180,7 @@ const UserProfile: React.FC = () => {
           <FontAwesome6
             name={'headset'}
             size={responsiveFontSize(3)}
-            color={COLORS.black}
+            color={'gray'}
           />
           <Text style={styles.serviceText}>Help & Support</Text>
         </TouchableOpacity>
@@ -210,14 +217,12 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   userImgIcon: {
-    width: responsiveWidth(30),
-    height: responsiveWidth(30),
-    backgroundColor: COLORS.graylight,
-    borderRadius: responsiveWidth(15),
+    width: responsiveWidth(40),
+    height: responsiveWidth(40),
+    borderRadius: responsiveWidth(40),
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: responsiveHeight(10),
   },
   userView: {
     flexDirection: 'row',

@@ -6,7 +6,6 @@ export type UserDetails = {
   email: string;
   password: string;
   location: string;
-  address: string;
   role: "customer" | "partner" | "associate";
 };
 

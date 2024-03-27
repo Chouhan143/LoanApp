@@ -24,6 +24,7 @@ import ResetVerifyOtpScreen from '../auth/Reset Password/ResetVerifyOtpScreen';
 import ResetVerifyEmailScreen from '../auth/Reset Password/ResetVerifyEmailScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangePasswordScreen from '../screens/Profile/Change Password/ChangePasswordScreen';
+import VerifyEmailOtp from '../screens/Profile/Verify Email/VerifyEmailOtp';
 
 export type StackNavigationPropList = {
   loginScreen: undefined;
@@ -39,6 +40,7 @@ export type StackNavigationPropList = {
   otpScreen: undefined;
   resetVerifyOtp: undefined;
   changePasswordScreen: undefined;
+  verifyEmailOtp: undefined;
 };
 
 export type NavigationProps = StackNavigationProp<StackNavigationPropList>;
@@ -62,7 +64,6 @@ export default function Navigation() {
         setRole(role);
         // console.log(typeof status);
         // console.log(typeof role);
-        
       }
     } catch (error) {
       console.error('Error retrieving login status:', error);
@@ -150,6 +151,12 @@ export default function Navigation() {
         component={OtpScreen}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="verifyEmailOtp"
+        component={VerifyEmailOtp}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name="homeScreen"
         component={HomeScreen}

@@ -5,6 +5,8 @@ import {
   TextInput,
   View,
   FlatList,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {
@@ -18,37 +20,12 @@ import Font6 from 'react-native-vector-icons/FontAwesome6';
 import {COLORS} from '../../themes/COLORS';
 import {getLoanApplication} from '../../Hooks/getLoanApplication';
 import {useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
 
 const LoanApplication = () => {
   const [applications, setApplications] = useState([]);
-  const Loan_Status = [
-    {
-      id: 1,
-      Applicant_name: 'Suraj',
-      Status: 'pending',
-    },
-    {
-      id: 2,
-      Applicant_name: 'Mukesh',
-      Status: 'pending',
-    },
-    {
-      id: 3,
-      Applicant_name: 'Raj',
-      Status: 'Active',
-    },
-    {
-      id: 4,
-      Applicant_name: 'Mahesh',
-      Status: 'pending',
-    },
-    {
-      id: 5,
-      Applicant_name: 'Govind',
-      Status: 'Active',
-    },
-  ];
+  const [userDetails, setUserDetails] = useState('');
 
   let details = useSelector(state => state.ReduxStore.localstorageUserDetails);
   useFocusEffect(
@@ -56,6 +33,19 @@ const LoanApplication = () => {
       allAvailableLoanApplications();
     }, []),
   );
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  const getUserDetails = async () => {
+    let payload = {
+      user_id: details?.user_id,
+    };
+    let data = await fetchUserDetails(payload);
+    setUserDetails(data);
+    // console.log('user details loan application >>>>', data);
+  };
 
   const allAvailableLoanApplications = async () => {
     let payload = {
@@ -65,29 +55,23 @@ const LoanApplication = () => {
     setApplications(data);
     // console.log();
   };
+
+  const navigation = useNavigation();
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <View
-        style={{
-          flex: 0.5,
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          marginVertical: responsiveHeight(2),
-          marginHorizontal: responsiveWidth(3),
-        }}>
-        <View style={styles.userImg}>
-          <Font6
-            name={'circle-user'}
-            size={responsiveFontSize(4.5)}
-            color={COLORS.white}
-          />
-        </View>
-
-        <MenuIcon
-          name={'menu'}
-          size={responsiveFontSize(3)}
-          color={COLORS.black}
-        />
+      <View style={styles.headingContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('userProfile')}
+          style={styles.userImg}>
+          {userDetails.img ? (
+            <Image source={{uri: userDetails.img}} style={styles.userImg} />
+          ) : (
+            <Image
+              source={require('../../assets/profile.png')}
+              style={styles.userImg}
+            />
+          )}
+        </TouchableOpacity>
       </View>
 
       <View style={{flex: 0.5, alignItems: 'center'}}>
@@ -151,7 +135,7 @@ const LoanApplication = () => {
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Text style={styles.noApplicationFoundText}>
-              No ApplicationAvailable
+              No Application Available
             </Text>
           </View>
         )}
@@ -163,6 +147,13 @@ const LoanApplication = () => {
 export default LoanApplication;
 
 const styles = StyleSheet.create({
+  headingContainer: {
+    flex: 0.5,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginVertical: responsiveHeight(2),
+    marginHorizontal: responsiveWidth(3),
+  },
   userImg: {
     width: responsiveWidth(10),
     height: responsiveWidth(10),

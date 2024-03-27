@@ -10,17 +10,24 @@ type UpdateProfileDetailsProps = {
   address: string;
   img: string;
 };
+
 export const updateDetails = async (details: UpdateProfileDetailsProps) => {
+  // console.log('update profile details >>>>>>', details._parts[4]);
+
   try {
     let response = await fetch(`${BaseUrl}/update-profile`, {
       method: 'POST',
+      body: details,
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'multipart/form-data',
       },
-      body: JSON.stringify(details),
     });
+    // console.log(response.ok);
+
     if (response.ok) {
       let data = await response.json();
+      // console.log('api response >>>>', data);
+
       if (data.status === 'success') {
         Toast.show({
           type: 'success',

@@ -19,16 +19,16 @@ import {
   responsiveScreenWidth,
   responsiveScreenHeight,
 } from 'react-native-responsive-dimensions';
-import {COLORS} from '../../themes/COLORS';
+import {COLORS} from '../../../themes/COLORS';
 import OtpInputs from 'react-native-otp-inputs';
 // import useNetInfo from '../OtherScreens/useNetInfo';
 // import NoConnection from '../OtherScreens/NoConnection';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-import {StackNavigationPropList} from '../../navigation/Navigation';
+import {StackNavigationPropList} from '../../../navigation/Navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
-import {verifyEmailOtp} from '../../Hooks/verifyEmailOtp';
 import Toast from 'react-native-toast-message';
+import {verifyEmailOtp} from '../../../Hooks/verifyEmailOtp';
 
 type NavigationProps = StackNavigationProp<
   StackNavigationPropList,
@@ -36,35 +36,26 @@ type NavigationProps = StackNavigationProp<
   'loginScreen'
 >;
 
-const OtpScreen: React.FC = () => {
+const VerifyEmailOtp: React.FC = () => {
   const [otp, setOtp] = useState('');
   const navigation = useNavigation<NavigationProps>();
-  const [local_data, setLocal_Data] = useState(true);
-  const [buttonIndicator, setButtonIndicator] = useState(false);
-  const userDetails = useSelector(state => {
-    if (state.ReduxStore.registrationData.user) {
-      return state.ReduxStore.registrationData.user;
-    } else {
-      return state.ReduxStore.localstorageUserDetails;
-    }
-  });
+  let [msg, setMsg] = useState('');
+  let [err, setErr] = useState('');
+  let [status, setStaus] = useState(null);
 
-  useEffect(() => {
-    if (userDetails) {
-      setLocal_Data(false);
-    } else {
-      setLocal_Data(true);
-    }
-  }, [userDetails]); // Only run this effect when userDetails changes
+  const [buttonIndicator, setButttonIndicator] = useState(false);
+  const details = useSelector(
+    state => state.ReduxStore.localstorageUserDetails,
+  );
+//   console.log("details",details);
 
   const handleVerifyOtpClick = async () => {
-    setButtonIndicator(true);
     const payload = {
-      user_id: local_data ? userDetails.id : userDetails.user_id,
+      user_id: details.user_id,
       otp: otp,
     };
     let data = await verifyEmailOtp(payload);
-    // console.log(data);
+    // console.log((data));
 
     if (data.result) {
       Toast.show({
@@ -82,7 +73,7 @@ const OtpScreen: React.FC = () => {
           color: 'black',
         },
       });
-      setButtonIndicator(false);
+
       navigation.navigate('loginScreen');
     } else {
       Toast.show({
@@ -100,7 +91,6 @@ const OtpScreen: React.FC = () => {
           color: 'black',
         },
       });
-      setButtonIndicator(false);
     }
   };
   return (
@@ -108,7 +98,7 @@ const OtpScreen: React.FC = () => {
       <View style={styles.view1}>
         <View style={styles.logoView}>
           <Image
-            source={require('../../assets/logo.png')}
+            source={require('../../../assets/logo.png')}
             style={{
               width: responsiveWidth(28),
               height: responsiveWidth(28),
@@ -202,11 +192,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoView: {
+    borderWidth: responsiveWidth(0.5),
+    borderColor: COLORS.Primary,
     width: responsiveWidth(38),
     height: responsiveWidth(38),
     borderRadius: responsiveWidth(19),
     justifyContent: 'center',
     alignItems: 'center',
+    borderStyle: 'dotted',
   },
   image: {
     width: responsiveWidth(80),
@@ -265,4 +258,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OtpScreen;
+export default VerifyEmailOtp;

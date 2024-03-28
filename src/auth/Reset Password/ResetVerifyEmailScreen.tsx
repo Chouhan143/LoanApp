@@ -30,7 +30,7 @@ const ResetVerifyEmailScreen: React.FC = () => {
   const handleProceedClick = async () => {
     setLoader(true);
     let data = await forgetVerifyEmail(email);
-    console.log(data);
+    // console.log(data);
 
     if (data.result) {
       setLoader(false);
@@ -96,6 +96,7 @@ const ResetVerifyEmailScreen: React.FC = () => {
               value={email}
               // editable={false}
               placeholder="enter registered email"
+              placeholderTextColor="gray"
               // placeholderTextColor={COLORS.black}a
             />
           </View>

@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -22,7 +23,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {UserDetails, registerUser} from '../../Hooks/registerUser';
 import Toast from 'react-native-toast-message';
 import ToastMessage from '../../constant/ToastMessage';
-import {addLocalStorageUserDetails, addRegistrationData} from '../../redux/Slice';
+import {
+  addLocalStorageUserDetails,
+  addRegistrationData,
+} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
 import styles from './styles';
 
@@ -39,9 +43,11 @@ const AssociateForm: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
 
   const RegisterUser = async () => {
+    setLoader(true);
     const details: UserDetails = {
       name: name,
       email: email,
@@ -55,6 +61,7 @@ const AssociateForm: React.FC = () => {
     const data = await registerUser(details);
     // console.log('register user data>>>>', data);
     if (data.result) {
+      setLoader(false);
       dispatch(addRegistrationData(data));
       Toast.show({
         type: 'success',
@@ -72,8 +79,9 @@ const AssociateForm: React.FC = () => {
         },
       });
 
-      navigation.navigate('emailVerification',{screenName:"register"});
+      navigation.navigate('emailVerification', {screenName: 'register'});
     } else {
+      setLoader(false);
       Toast.show({
         type: 'error',
         text1: 'Registration failed',
@@ -118,7 +126,7 @@ const AssociateForm: React.FC = () => {
             style={styles.inputFiled}
             onChangeText={text => setName(text)}
             placeholder="enter your name"
-            placeholderTextColor={"gray"}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
@@ -126,25 +134,25 @@ const AssociateForm: React.FC = () => {
             placeholder="enter phone no."
             keyboardType="number-pad"
             maxLength={10}
-            placeholderTextColor={"gray"}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setEmail(text)}
             placeholder="enter your email"
-            placeholderTextColor={"gray"}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setPassword(text)}
             placeholder="create password"
-            placeholderTextColor={"gray"}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setLocation(text)}
             placeholder="enter your location"
-            placeholderTextColor={"gray"}
+            placeholderTextColor={'gray'}
           />
           {/* <TextInput
             style={styles.inputFiled}
@@ -157,7 +165,11 @@ const AssociateForm: React.FC = () => {
         {/* button  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={RegisterUser} style={styles.loginBtn}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+            {loader ? (
+              <ActivityIndicator size={'large'} color={'white'} />
+            ) : (
+              <Text style={styles.buttonText}>Sign Up</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

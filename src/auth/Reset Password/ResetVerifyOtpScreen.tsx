@@ -42,12 +42,14 @@ const ResetVerifyOtpScreen: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [otp, setOtp] = useState('');
+  const [loader, setLoader] = useState(false);
 
-  const [buttonIndicator, setButttonIndicator] = useState(false);
+  // const [buttonIndicator, setButttonIndicator] = useState(false);
   //   const details = useSelector(state => state.ReduxStore.registrationData.user);
   // console.log("details>>>",details);
 
   const handleVerifyOtpClick = async () => {
+    setLoader(true);
     const payload: Details = {
       newPassword: newPassword,
       confirmPassword: confirmNewPassword,
@@ -55,6 +57,7 @@ const ResetVerifyOtpScreen: React.FC = () => {
     };
     let data = await forgetOldPassword(payload);
     if (data.result) {
+      setLoader(false);
       Toast.show({
         type: 'success',
         text1: 'OTP Varified',
@@ -73,10 +76,19 @@ const ResetVerifyOtpScreen: React.FC = () => {
 
       navigation.navigate('loginScreen');
     } else {
+      setLoader(false);
       Toast.show({
         type: 'error',
         text1: 'Verification failed',
-        text2: `${data.message}`,
+        text2: `${
+          data.errors.password
+            ? data.errors.password[0]
+            : data.errors.confirm_password
+            ? data.errors.confirm_password[0]
+            : data.errors.otp
+            ? data.errors.otp[0]
+            : 'failed to forget password'
+        }`,
         text1Style: {
           fontSize: responsiveFontSize(2),
           fontWeight: '700',
@@ -114,6 +126,7 @@ const ResetVerifyOtpScreen: React.FC = () => {
             style={styles.inputeViewStyle}
             placeholder="enter new password"
             onChangeText={text => setNewPassword(text)}
+            placeholderTextColor={'gray'}
             // placeholderTextColor={COLORS.black}
           />
 
@@ -121,6 +134,7 @@ const ResetVerifyOtpScreen: React.FC = () => {
             style={styles.inputeViewStyle}
             placeholder="confirm new password"
             onChangeText={text => setConfirmNewPassword(text)}
+            placeholderTextColor={'gray'}
             // placeholderTextColor={COLORS.black}
             secureTextEntry // Toggle password visibility
           />
@@ -148,7 +162,7 @@ const ResetVerifyOtpScreen: React.FC = () => {
             onPress={handleVerifyOtpClick}
             // onPress={() => navigation.navigate('loginScreen')}
             style={styles.submitButton}>
-            {buttonIndicator ? (
+            {loader ? (
               <ActivityIndicator size="large" color="white" />
             ) : (
               <Text style={styles.submitButtonText}>Verify OTP</Text>
@@ -263,6 +277,7 @@ const styles = StyleSheet.create({
     borderWidth: responsiveWidth(0.2),
     marginVertical: responsiveScreenWidth(1),
     fontSize: responsiveFontSize(2),
+    color: 'black',
   },
 
   submitButtonContainer: {

@@ -10,7 +10,7 @@ export type UserDetails = {
 };
 
 export const registerUser = async (details: UserDetails) => {
-  console.log('details with role>>>>', details);
+  // console.log('details with role>>>>', details);
   try {
     const response = await fetch(`${BaseUrl}/register`, {
       method: 'POST',

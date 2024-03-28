@@ -155,9 +155,9 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveWidth(3),
   },
   userImg: {
-    width: responsiveWidth(10),
-    height: responsiveWidth(10),
-    borderRadius: responsiveWidth(5),
+    width: responsiveWidth(14),
+    height: responsiveWidth(14),
+    borderRadius: responsiveWidth(14),
     backgroundColor: COLORS.graylight,
     justifyContent: 'center',
     alignItems: 'center',

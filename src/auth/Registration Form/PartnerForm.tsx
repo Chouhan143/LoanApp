@@ -4,6 +4,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -41,9 +42,11 @@ const PartnerForm = () => {
   const [password, setPassword] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
 
   const RegisterUser = async () => {
+    setLoader(true);
     const details: UserDetails = {
       name: name,
       email: email,
@@ -57,6 +60,7 @@ const PartnerForm = () => {
     const data = await registerUser(details);
     // console.log('register user data>>>>', data);
     if (data.result) {
+      setLoader(false);
       dispatch(addRegistrationData(data));
       Toast.show({
         type: 'success',
@@ -74,9 +78,9 @@ const PartnerForm = () => {
         },
       });
       // dispatch(addScreenName("registration"))
-      navigation.navigate('emailVerification',{screenName:"register"});
-
+      navigation.navigate('emailVerification', {screenName: 'register'});
     } else {
+      setLoader(false);
       Toast.show({
         type: 'error',
         text1: 'Registration failed',
@@ -160,7 +164,11 @@ const PartnerForm = () => {
         {/* button  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={RegisterUser} style={styles.loginBtn}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+            {loader ? (
+              <ActivityIndicator size={'large'} color={'white'} />
+            ) : (
+              <Text style={styles.buttonText}>Sign Up</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

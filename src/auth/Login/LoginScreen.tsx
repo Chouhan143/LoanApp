@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   BackHandler,
+  DevSettings
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {

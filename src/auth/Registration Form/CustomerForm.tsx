@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import styles from './styles';
@@ -18,7 +19,10 @@ import {
   responsiveScreenHeight,
   responsiveScreenWidth,
 } from 'react-native-responsive-dimensions';
-import {addLocalStorageUserDetails, addRegistrationData} from '../../redux/Slice';
+import {
+  addLocalStorageUserDetails,
+  addRegistrationData,
+} from '../../redux/Slice';
 import {useDispatch} from 'react-redux';
 type NavigationProps = StackNavigationProp<
   StackNavigationPropList,
@@ -33,9 +37,11 @@ const CustomerForm = () => {
   const [password, setPassword] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
 
   const RegisterUser = async () => {
+    setLoader(true);
     const details: UserDetails = {
       name: name,
       email: email,
@@ -49,6 +55,7 @@ const CustomerForm = () => {
     const data = await registerUser(details);
     // console.log('register user data>>>>', data);
     if (data.result) {
+      setLoader(false);
       dispatch(addRegistrationData(data));
       Toast.show({
         type: 'success',
@@ -65,8 +72,9 @@ const CustomerForm = () => {
           color: 'black',
         },
       });
-      navigation.navigate('emailVerification',{screenName:"register"});
+      navigation.navigate('emailVerification', {screenName: 'register'});
     } else {
+      setLoader(false);
       Toast.show({
         type: 'error',
         text1: 'Registration failed',
@@ -149,7 +157,11 @@ const CustomerForm = () => {
         {/* button  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={RegisterUser} style={styles.loginBtn}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+            {loader ? (
+              <ActivityIndicator size={'large'} color={'white'} />
+            ) : (
+              <Text style={styles.buttonText}>Sign Up</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

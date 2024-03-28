@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   RefreshControl,
+  DevSettings,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -126,6 +127,9 @@ const HomeScreen: React.FC = () => {
     }, []),
   );
 
+  // useEffect(() => {
+  //   DevSettings.reload();
+  // }, []);
   const getUserDetails = async () => {
     let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
       'loginUserDetails',
@@ -179,7 +183,7 @@ const HomeScreen: React.FC = () => {
           color: 'black',
         },
       });
-      navigation.navigate('emailVerification');
+      navigation.navigate('emailVerification', {screenName: ''});
     } else if (details?.is_verify == 1) {
       navigation.navigate('loanFormScreen');
     }

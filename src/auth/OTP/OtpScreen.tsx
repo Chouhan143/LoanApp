@@ -39,7 +39,7 @@ type NavigationProps = StackNavigationProp<
 const OtpScreen: React.FC = () => {
   const [otp, setOtp] = useState('');
   const navigation = useNavigation<NavigationProps>();
-  const [local_data, setLocal_Data] = useState(true);
+  const [local_data, setLocal_Data] = useState(false);
   const [buttonIndicator, setButtonIndicator] = useState(false);
   const userDetails = useSelector(state => {
     if (state.ReduxStore.registrationData.user) {
@@ -49,13 +49,15 @@ const OtpScreen: React.FC = () => {
     }
   });
 
+  console.log('user details on otp screen >>>>', userDetails);
+
   useEffect(() => {
-    if (userDetails) {
-      setLocal_Data(false);
+    if (userDetails && !userDetails.user_id) {
+      setLocal_Data(true); // Set local_data to true only when userDetails is fetched from localstorageUserDetails state
     } else {
-      setLocal_Data(true);
+      setLocal_Data(false);
     }
-  }, [userDetails]); // Only run this effect when userDetails changes
+  }, [userDetails]);
 
   const handleVerifyOtpClick = async () => {
     setButtonIndicator(true);
@@ -64,7 +66,7 @@ const OtpScreen: React.FC = () => {
       otp: otp,
     };
     let data = await verifyEmailOtp(payload);
-    // console.log(data);
+    // console.log('verify email after registration with otp >>>>>>', data);
 
     if (data.result) {
       Toast.show({

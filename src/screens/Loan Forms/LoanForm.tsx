@@ -228,7 +228,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Firm Name <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter campany name"
+          placeholder="Enter campany name"
           onChangeText={text => setFirm_name(text)}
           style={styles.textInput}
           placeholderTextColor={'gray'}
@@ -240,7 +240,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Contact Person <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter contact person"
+          placeholder="Enter contact person"
           style={styles.textInput}
           onChangeText={text => setContact_Person(text)}
           placeholderTextColor={'gray'}
@@ -252,7 +252,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Mobile No. <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter mobile no."
+          placeholder="Enter mobile no."
           onChangeText={text => setMobile(text)}
           style={styles.textInput}
           keyboardType="number-pad"
@@ -272,7 +272,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Email ID <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter email id"
+          placeholder="Enter email id"
           onChangeText={text => setEmail(text)}
           style={styles.textInput}
           placeholderTextColor={'gray'}
@@ -291,7 +291,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Date of Incorporation <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter date dd/mm/yyyy formate"
+          placeholder="Enter date dd/mm/yyyy formate"
           style={styles.textInput}
           onChangeText={text => setDate_Of_Corporate(text)}
           placeholderTextColor={'gray'}
@@ -303,7 +303,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Pan No <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter pancard no."
+          placeholder="Enter pancard no."
           onChangeText={text => setPan_Number(text)}
           style={styles.textInput}
           maxLength={10}
@@ -316,7 +316,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Gst No (optional)
         </Text>
         <TextInput
-          placeholder="enter gst no."
+          placeholder="Enter gst no."
           onChangeText={text => setGst_Number(text)}
           style={styles.textInput}
           placeholderTextColor={'gray'}
@@ -340,7 +340,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter current FY sales tax"
+          placeholder="Enter current FY sales tax"
           style={styles.textInput}
           onChangeText={text => setCurrent_Fy(text)}
           placeholderTextColor={'gray'}
@@ -372,7 +372,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Last FY Sales Tax | IT Returns <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter last FY IT return"
+          placeholder="Enter last FY IT return"
           style={styles.textInput}
           onChangeText={text => setLast_Fy(text)}
           placeholderTextColor={'gray'}
@@ -384,7 +384,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           Loan Required <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
-          placeholder="enter loan requirement"
+          placeholder="Enter loan requirement"
           style={styles.textInput}
           onChangeText={text => setLoan_Required(text)}
           placeholderTextColor={'gray'}

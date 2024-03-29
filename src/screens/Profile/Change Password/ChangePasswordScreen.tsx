@@ -80,7 +80,7 @@ const ChangePasswordScreen: React.FC = () => {
             }}>
             <TextInput
               style={styles.inputeViewStyle}
-              placeholder="enter your email"
+              placeholder="Enter your email"
               onChangeText={text => setEmail(text)}
               placeholderTextColor={"gray"}
               // placeholderTextColor={COLORS.black}
@@ -88,7 +88,7 @@ const ChangePasswordScreen: React.FC = () => {
 
             <TextInput
               style={styles.inputeViewStyle}
-              placeholder="enter password"
+              placeholder="Enter password"
               onChangeText={text => setOldPassword(text)}
               maxLength={6}
               placeholderTextColor={"gray"}
@@ -97,7 +97,7 @@ const ChangePasswordScreen: React.FC = () => {
 
             <TextInput
               style={styles.inputeViewStyle}
-              placeholder="enter new password"
+              placeholder="Enter new password"
               onChangeText={text => setNewPassword(text)}
               maxLength={6}
               placeholderTextColor={"gray"}

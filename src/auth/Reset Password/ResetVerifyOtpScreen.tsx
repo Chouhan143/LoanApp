@@ -56,6 +56,8 @@ const ResetVerifyOtpScreen: React.FC = () => {
       otp: otp,
     };
     let data = await forgetOldPassword(payload);
+    // console.log('reset password verify otp >>>>>', data);
+
     if (data.result) {
       setLoader(false);
       Toast.show({
@@ -124,7 +126,7 @@ const ResetVerifyOtpScreen: React.FC = () => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputeViewStyle}
-            placeholder="enter new password"
+            placeholder="Enter new password"
             onChangeText={text => setNewPassword(text)}
             placeholderTextColor={'gray'}
             // placeholderTextColor={COLORS.black}
@@ -132,7 +134,7 @@ const ResetVerifyOtpScreen: React.FC = () => {
 
           <TextInput
             style={styles.inputeViewStyle}
-            placeholder="confirm new password"
+            placeholder="Confirm new password"
             onChangeText={text => setConfirmNewPassword(text)}
             placeholderTextColor={'gray'}
             // placeholderTextColor={COLORS.black}

@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: responsiveScreenWidth(2),
     fontSize: responsiveFontSize(2),
-    fontWeight: '700',
+    // fontWeight: '700',
     color: COLORS.Primary,
     paddingLeft: responsiveScreenWidth(3),
     // marginBottom: responsiveScreenWidth(2),

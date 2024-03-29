@@ -43,7 +43,7 @@ const UserProfile: React.FC = () => {
       return () => {
         BackHandler.removeEventListener('hardwareBackPress', backHandler);
       };
-    }, []),
+    }, [details]),
   );
 
   const getUserDetails = async () => {

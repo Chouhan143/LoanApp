@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {
@@ -26,6 +27,7 @@ import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
 const LoanApplication = () => {
   const [applications, setApplications] = useState([]);
   const [userDetails, setUserDetails] = useState('');
+  const [refreshing, setRefresing] = useState(false);
 
   let details = useSelector(state => state.ReduxStore.localstorageUserDetails);
   useFocusEffect(
@@ -53,7 +55,12 @@ const LoanApplication = () => {
     };
     let data = await getLoanApplication(payload);
     setApplications(data);
+    setRefresing(false);
     // console.log();
+  };
+
+  const onRefresh = () => {
+    allAvailableLoanApplications();
   };
 
   const navigation = useNavigation();
@@ -96,6 +103,9 @@ const LoanApplication = () => {
           <View style={{flex: 1, alignItems: 'center'}}>
             <FlatList
               data={applications}
+              refreshControl={
+                <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+              }
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
                 return (

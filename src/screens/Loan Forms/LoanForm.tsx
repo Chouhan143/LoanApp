@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   responsiveFontSize,
   responsiveWidth,
@@ -26,6 +26,8 @@ import Toast from 'react-native-toast-message';
 import {useSelector} from 'react-redux';
 import {ActivityIndicator} from 'react-native';
 import {NavigationProps} from '../../navigation/Navigation';
+import DatePicker from 'react-native-date-picker';
+import {format} from 'date-fns';
 const LoanForm: React.FC<{selectedLoan: string}> = ({
   selectedLoan,
 }: {
@@ -36,7 +38,8 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   const [mobile, setMobile] = useState('');
   const [contact_person, setContact_Person] = useState('');
   const [email, setEmail] = useState('');
-  const [date_of_corporate, setDate_Of_Corporate] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [date_of_corporate, setDate_Of_Corporate] = useState<string>('');
   const [pan_number, setPan_Number] = useState('');
   const [current_fy, setCurrent_Fy] = useState('');
   const [loan_required, setLoan_Required] = useState('');
@@ -45,11 +48,66 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   const [gst_number, setGst_Number] = useState('');
   const [last_fy, setLast_Fy] = useState('');
   const [loader, setLoader] = useState(false);
+  const [open, setOpen] = useState(false);
   const details = useSelector(
     state => state.ReduxStore.localstorageUserDetails,
   );
   const navigation = useNavigation<NavigationProps>();
 
+  const selectSelfie = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images], // specify the type of files to pick (optional)
+      });
+
+      // res.uri is the URI of the selected image
+      setImg(res[0].uri);
+      console.log('URI of selected image:', res[0].uri);
+
+      // Handle the selected image URI here (e.g., set it to state, pass it to another function, etc.)
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+        console.log('User cancelled the picker');
+      } else {
+        // Error occurred while picking the file
+        console.log('Error picking file:', err);
+      }
+    }
+  };
+  const selectPanPhoto = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images], // specify the type of files to pick (optional)
+      });
+
+      // res.uri is the URI of the selected image
+      setPan_Image(res[0].uri);
+      console.log('URI of selected image:', res[0].uri);
+
+      // Handle the selected image URI here (e.g., set it to state, pass it to another function, etc.)
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+        console.log('User cancelled the picker');
+      } else {
+        // Error occurred while picking the file
+        console.log('Error picking file:', err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    let date = new Date();
+    formatDate(date);
+  }, []);
+
+  // Function to format date in DD/MM/YYYY format
+  const formatDate = date => {
+    const newDate = format(date, 'dd/MM/yyyy');
+    setDate_Of_Corporate(newDate);
+    return newDate;
+  };
 
   const handleSumbitLoanForm = async () => {
     setLoader(true);
@@ -177,50 +235,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
       setLoader(false);
     }
   };
-
-  const selectSelfie = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images], // specify the type of files to pick (optional)
-      });
-
-      // res.uri is the URI of the selected image
-      setImg(res[0].uri);
-      console.log('URI of selected image:', res[0].uri);
-
-      // Handle the selected image URI here (e.g., set it to state, pass it to another function, etc.)
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-        console.log('User cancelled the picker');
-      } else {
-        // Error occurred while picking the file
-        console.log('Error picking file:', err);
-      }
-    }
-  };
-  const selectPanPhoto = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images], // specify the type of files to pick (optional)
-      });
-
-      // res.uri is the URI of the selected image
-      setPan_Image(res[0].uri);
-      console.log('URI of selected image:', res[0].uri);
-
-      // Handle the selected image URI here (e.g., set it to state, pass it to another function, etc.)
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-        console.log('User cancelled the picker');
-      } else {
-        // Error occurred while picking the file
-        console.log('Error picking file:', err);
-      }
-    }
-  };
-
+  // console.log('selected date >>>>', date_of_corporate);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.inputFieldContainer}>
@@ -286,16 +301,41 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
         /> */}
       </View>
 
+      {/* date picker container */}
       <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
           Date of Incorporation <Text style={{color: 'red'}}>*</Text>
         </Text>
-        <TextInput
+        {/* <TextInput
           placeholder="Enter date dd/mm/yyyy formate"
           style={styles.textInput}
           onChangeText={text => setDate_Of_Corporate(text)}
           placeholderTextColor={'gray'}
-        />
+        /> */}
+        <View style={styles.datePickerContainer}>
+          <View style={{flex: 2.8, justifyContent: 'center'}}>
+            <Text style={styles.dateText}>{date_of_corporate}</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => setOpen(!open)}
+            style={styles.pickDateButton}>
+            <Text style={styles.pickDateBtnText}>Select</Text>
+          </TouchableOpacity>
+
+          {/* date picker */}
+          <DatePicker
+            modal
+            open={open}
+            date={date}
+            mode="date" // Set mode to "date" to select only the date
+            onConfirm={selectedDate => {
+              formatDate(selectedDate);
+            }}
+            onCancel={() => {
+              setOpen(false);
+            }}
+          />
+        </View>
       </View>
 
       <View style={styles.inputFieldContainer}>
@@ -308,6 +348,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           style={styles.textInput}
           maxLength={10}
           placeholderTextColor={'gray'}
+          autoCapitalize="characters"
         />
       </View>
 
@@ -388,6 +429,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           style={styles.textInput}
           onChangeText={text => setLoan_Required(text)}
           placeholderTextColor={'gray'}
+          keyboardType="number-pad"
         />
       </View>
 
@@ -491,6 +533,11 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2),
     color: 'black',
   },
+  dateText: {
+    fontSize: responsiveFontSize(2.1),
+    color: 'black',
+    fontWeight: '500',
+  },
   headingText: {
     fontSize: responsiveFontSize(3.5),
     color: COLORS.black,
@@ -536,5 +583,29 @@ const styles = StyleSheet.create({
     fontSize: responsiveScreenFontSize(1.8),
     marginVertical: responsiveWidth(2),
     color: 'green',
+  },
+  datePickerContainer: {
+    width: responsiveWidth(90),
+    height: responsiveHeight(6),
+    paddingLeft: responsiveWidth(3),
+    borderColor: COLORS.graylight,
+    borderWidth: responsiveWidth(0.3),
+    borderRadius: responsiveWidth(2),
+    fontSize: responsiveFontSize(2),
+    color: 'black',
+    flexDirection: 'row',
+  },
+  pickDateButton: {
+    flex: 1.5,
+    margin: 2,
+    backgroundColor: COLORS.Primary,
+    borderRadius: responsiveWidth(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pickDateBtnText: {
+    fontSize: responsiveFontSize(2),
+    color: 'white',
+    fontWeight: '500',
   },
 });

@@ -119,7 +119,7 @@ const EmailVerification = () => {
             <TextInput
               style={styles.inputeViewStyle}
               value={email ? email : email}
-              placeholder="name@example.com"
+              placeholder="Email"
               placeholderTextColor={'gray'}
               // placeholderTextColor={COLORS.black}a
             />

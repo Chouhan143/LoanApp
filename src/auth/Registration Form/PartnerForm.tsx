@@ -124,13 +124,13 @@ const PartnerForm = () => {
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setName(text)}
-            placeholder="enter your name"
+            placeholder="Enter your name"
             placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setPhone(text)}
-            placeholder="enter phone no."
+            placeholder="Enter phone no."
             keyboardType="number-pad"
             maxLength={10}
             placeholderTextColor={'gray'}
@@ -138,19 +138,19 @@ const PartnerForm = () => {
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setEmail(text)}
-            placeholder="enter your email"
+            placeholder="Enter your email"
             placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setPassword(text)}
-            placeholder="create password"
+            placeholder="Create password"
             placeholderTextColor={'gray'}
           />
           <TextInput
             style={styles.inputFiled}
             onChangeText={text => setLocation(text)}
-            placeholder="enter your location"
+            placeholder="Enter your location"
             placeholderTextColor={'gray'}
           />
           {/* <TextInput

@@ -158,7 +158,7 @@ const LoginScreen: React.FC = () => {
           <Text style={styles.Heading}>Sign In</Text>
           <View style={styles.inputeViewStyle}>
             <TextInput
-              placeholder="email"
+              placeholder="Email"
               placeholderTextColor={'gray'}
               onChangeText={text => setEmail(text)}
               style={styles.inputStyle}
@@ -168,7 +168,7 @@ const LoginScreen: React.FC = () => {
           <View style={styles.inputeViewStyle}>
             <View style={{flex: 5}}>
               <TextInput
-                placeholder="password "
+                placeholder="Password "
                 placeholderTextColor={'gray'}
                 secureTextEntry={showPassword}
                 style={styles.inputStyle}

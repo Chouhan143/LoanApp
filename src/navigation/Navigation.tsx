@@ -3,7 +3,7 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import LoginScreen from '../auth/Login/LoginScreen';
-import ResetPassword from '../screens/Profile/Change Password/ResetPassword';
+// import ResetPassword from '../screens/Profile/Change Password/ResetPassword';
 import SplaceScreen from '../screens/SplaceScreen';
 import EmailVerification from '../auth/Registration Form/EmailVerification';
 import PersoalLoan from '../screens/Loan Forms/LoanFormScreen';
@@ -25,6 +25,11 @@ import ResetVerifyEmailScreen from '../auth/Reset Password/ResetVerifyEmailScree
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangePasswordScreen from '../screens/Profile/Change Password/ChangePasswordScreen';
 import VerifyEmailOtp from '../screens/Profile/Verify Email/VerifyEmailOtp';
+import NetInfo from '@react-native-community/netinfo';
+import {Image, Text, View} from 'react-native';
+import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
+import useCheckConnection from '../Hooks/useCheckConnection';
+import Noconnection from '../components/Noconnection';
 
 export type StackNavigationPropList = {
   loginScreen: undefined;
@@ -49,6 +54,7 @@ export default function Navigation() {
   const navigation = useNavigation<NavigationProps>();
   const [status, setStatus] = useState<string | null>('');
   const [role, setRole] = useState<string | null>('');
+  const isConnected = useCheckConnection();
 
   useEffect(() => {
     getLoginStatus();
@@ -99,99 +105,105 @@ export default function Navigation() {
   }, [navigation, status, role]);
 
   return (
-    <Stack.Navigator
-      initialRouteName="splaceScreen"
-      screenOptions={{
-        headerMode: 'screen',
-        headerTintColor: COLORS.white,
-        headerStyle: {backgroundColor: COLORS.Primary},
-      }}>
-      <Stack.Screen
-        name="splaceScreen"
-        component={SplaceScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="filter"
-        component={Filter}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="loginScreen"
-        component={LoginScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="signUpScreen"
-        component={UserRoleTab}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="resetPassword"
-        component={ResetPassword}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="resetVerifyEmail"
-        component={ResetVerifyEmailScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="resetVerifyOtp"
-        component={ResetVerifyOtpScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="emailVerification"
-        component={EmailVerification}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="otpScreen"
-        component={OtpScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="verifyEmailOtp"
-        component={VerifyEmailOtp}
-        options={{headerShown: false}}
-      />
+    <>
+      {isConnected ? (
+        <Stack.Navigator
+          initialRouteName="splaceScreen"
+          screenOptions={{
+            headerMode: 'screen',
+            headerTintColor: COLORS.white,
+            headerStyle: {backgroundColor: COLORS.Primary},
+          }}>
+          <Stack.Screen
+            name="splaceScreen"
+            component={SplaceScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="filter"
+            component={Filter}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="loginScreen"
+            component={LoginScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="signUpScreen"
+            component={UserRoleTab}
+            options={{headerShown: false}}
+          />
+          {/* <Stack.Screen
+    name="resetPassword"
+    component={ResetPassword}
+    options={{headerShown: false}}
+  /> */}
+          <Stack.Screen
+            name="resetVerifyEmail"
+            component={ResetVerifyEmailScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="resetVerifyOtp"
+            component={ResetVerifyOtpScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="emailVerification"
+            component={EmailVerification}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="otpScreen"
+            component={OtpScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="verifyEmailOtp"
+            component={VerifyEmailOtp}
+            options={{headerShown: false}}
+          />
 
-      <Stack.Screen
-        name="homeScreen"
-        component={HomeScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="loanFormScreen"
-        component={LoanFormScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="LoanStatus"
-        component={LoanApplication}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="userProfile"
-        component={UserProfile}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="personalDetails"
-        component={PersonalInforScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="changePasswordScreen"
-        component={ChangePasswordScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="bottomTab"
-        component={BottomTab}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
+          <Stack.Screen
+            name="homeScreen"
+            component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="loanFormScreen"
+            component={LoanFormScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LoanStatus"
+            component={LoanApplication}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="userProfile"
+            component={UserProfile}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="personalDetails"
+            component={PersonalInforScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="changePasswordScreen"
+            component={ChangePasswordScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="bottomTab"
+            component={BottomTab}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      ) : (
+        <Noconnection />
+      )}
+    </>
   );
 }

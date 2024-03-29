@@ -172,6 +172,8 @@ const PersonalInforScreen: React.FC = () => {
             <TextInput
               style={editable ? styles.inputStyle : styles.serviceText}
               onChangeText={text => setName(text)}
+              placeholder="Enter name"
+              placeholderTextColor={'gray'}
               value={name}
               editable={editable}
             />
@@ -216,8 +218,10 @@ const PersonalInforScreen: React.FC = () => {
             <TextInput
               style={editable ? styles.inputStyle : styles.serviceText}
               onChangeText={text => setMobile(text)}
+              placeholder="Enter mobile number"
+              placeholderTextColor={'gray'}
               maxLength={10}
-              keyboardType='number-pad'
+              keyboardType="number-pad"
               value={mobile}
               editable={editable}
             />
@@ -244,7 +248,8 @@ const PersonalInforScreen: React.FC = () => {
             <TextInput
               style={editable ? styles.inputStyle : styles.serviceText}
               value={location}
-              placeholder="enter address"
+              placeholder="Enter address"
+              placeholderTextColor={'gray'}
               onChangeText={text => setLocation(text)}
               editable={editable}
             />

@@ -85,7 +85,7 @@ const OtpScreen: React.FC = () => {
         },
       });
       setButtonIndicator(false);
-      local_data ? navigation.navigate('loginScreen') : navigation.goBack();
+      navigation.navigate('loginScreen');
     } else {
       Toast.show({
         type: 'error',

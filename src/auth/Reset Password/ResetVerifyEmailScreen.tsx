@@ -95,7 +95,7 @@ const ResetVerifyEmailScreen: React.FC = () => {
               onChangeText={text => setEmail(text)}
               value={email}
               // editable={false}
-              placeholder="enter registered email"
+              placeholder="Enter registered email"
               placeholderTextColor="gray"
               // placeholderTextColor={COLORS.black}a
             />

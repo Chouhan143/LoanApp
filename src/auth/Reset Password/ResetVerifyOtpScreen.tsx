@@ -56,6 +56,8 @@ const ResetVerifyOtpScreen: React.FC = () => {
       otp: otp,
     };
     let data = await forgetOldPassword(payload);
+    // console.log('reset password verify otp >>>>>', data);
+
     if (data.result) {
       setLoader(false);
       Toast.show({

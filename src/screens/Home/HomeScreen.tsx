@@ -9,6 +9,8 @@ import {
   Image,
   RefreshControl,
   DevSettings,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
@@ -201,6 +203,8 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
+    <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
+      <StatusBar barStyle={'dark-content'}/>
     <ScrollView
       refreshControl={
         <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
@@ -267,6 +271,7 @@ const HomeScreen: React.FC = () => {
         </View>
       )}
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

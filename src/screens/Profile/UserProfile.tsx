@@ -34,7 +34,7 @@ const UserProfile: React.FC = () => {
     state => state.ReduxStore.localstorageUserDetails,
   );
 
-  // console.log(details);
+  // console.log(userDetails.is_verify);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -52,7 +52,7 @@ const UserProfile: React.FC = () => {
     };
     let data = await fetchUserDetails(payload);
     setUserDetails(data);
-    // console.log('user details personal info screen >>>>', data);
+    console.log('user details personal info screen >>>>', data);
   };
 
   const handleLogout = async () => {
@@ -119,7 +119,7 @@ const UserProfile: React.FC = () => {
               color: COLORS.black,
               fontWeight: '700',
             }}>
-            {details?.user_name}
+            {userDetails?.name}
           </Text>
           <Text
             style={{
@@ -156,18 +156,34 @@ const UserProfile: React.FC = () => {
           <Text style={styles.serviceText}>Change Password</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('emailVerification', {screenName: ''})
-          }
-          style={styles.userView}>
-          <MaterialCommunityIcon
-            name={'email-check'}
-            size={responsiveFontSize(3.5)}
-            color={'gray'}
-          />
-          <Text style={styles.serviceText}>Verify Email</Text>
-        </TouchableOpacity>
+        {/* {details.verified} */}
+        {userDetails.is_verify === 1 ? (
+          <TouchableOpacity disabled style={styles.userView}>
+            <MaterialCommunityIcon
+              name={'email-check'}
+              size={responsiveFontSize(3.5)}
+              color={'green'}
+            />
+            <Text style={[styles.serviceText, {color: 'green'}]}>
+              Email is verified
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('emailVerification', {screenName: ''})
+            }
+            style={styles.userView}>
+            <MaterialCommunityIcon
+              name={'email-check'}
+              size={responsiveFontSize(3.5)}
+              color={'red'}
+            />
+            <Text style={[styles.serviceText, {color: 'red'}]}>
+              Verify your email
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity
           style={[

@@ -25,7 +25,6 @@ import ResetVerifyEmailScreen from '../auth/Reset Password/ResetVerifyEmailScree
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangePasswordScreen from '../screens/Profile/Change Password/ChangePasswordScreen';
 import VerifyEmailOtp from '../screens/Profile/Verify Email/VerifyEmailOtp';
-import NetInfo from '@react-native-community/netinfo';
 import {Image, Text, View} from 'react-native';
 import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 import useCheckConnection from '../Hooks/useCheckConnection';
@@ -117,11 +116,6 @@ export default function Navigation() {
           <Stack.Screen
             name="splaceScreen"
             component={SplaceScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="filter"
-            component={Filter}
             options={{headerShown: false}}
           />
           <Stack.Screen

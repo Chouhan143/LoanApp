@@ -4,6 +4,8 @@ type Details = {
   user_id: any;
 };
 export const fetchUserDetails = async (details: Details) => {
+  // console.log('user id payload details >>>>', details);
+
   try {
     let response = await fetch(`${BaseUrl}/user_detail`, {
       method: 'POST',

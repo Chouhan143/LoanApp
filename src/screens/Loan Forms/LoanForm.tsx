@@ -165,10 +165,15 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
     }
 
     let data = await submitLoanForm(formdata);
-    // console.log('submit form response >>>>>>', data);
+    console.log('submit form response >>>>>>', data);
     if (data.result) {
       setTimeout(() => {
         setLoader(false);
+        if (details.role === 'customer') {
+          navigation.navigate('homeScreen');
+        } else {
+          navigation.navigate('bottomTab');
+        }
         Toast.show({
           type: 'success',
           text1: 'Successfully submitted',
@@ -184,6 +189,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
             color: 'black',
           },
         });
+        console.log('user details >>>>>', details);
       }, 2000);
     } else if (data.errors) {
       setLoader(false);

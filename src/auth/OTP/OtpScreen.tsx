@@ -49,7 +49,7 @@ const OtpScreen: React.FC = () => {
     }
   });
 
-  console.log('user details on otp screen >>>>', userDetails);
+  // console.log('user details on otp screen >>>>', userDetails);
 
   useEffect(() => {
     if (userDetails && !userDetails.user_id) {
@@ -85,6 +85,7 @@ const OtpScreen: React.FC = () => {
         },
       });
       setButtonIndicator(false);
+
       navigation.navigate('loginScreen');
     } else {
       Toast.show({

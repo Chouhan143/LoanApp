@@ -12,7 +12,7 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {COLORS} from '../../themes/COLORS';
 import {
   responsiveFontSize,
@@ -37,6 +37,7 @@ import {useDispatch} from 'react-redux';
 import {fetchSliderImages} from '../../Hooks/fetchSliderImages';
 import Toast from 'react-native-toast-message';
 import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
+import { SliderBox } from "react-native-image-slider-box"
 
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 type LocalStorageDetailsProps = {
@@ -54,6 +55,7 @@ const HomeScreen: React.FC = () => {
   const [details, setDetails] = useState<LocalStorageDetailsProps | null>();
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [carousel, setCarousel] = useState([]);
   const dispatch = useDispatch();
 
   const LoanList = [
@@ -114,38 +116,38 @@ const HomeScreen: React.FC = () => {
     },
   ];
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setLoading(true);
-      getUserDetails();
-      AsyncStorage.setItem('loginStatus', JSON.stringify(true));
-      setTimeout(() => {
-        setLoading(false);
-      }, 400);
-      BackHandler.addEventListener('hardwareBackPress', backHandler);
-      return () => {
-        BackHandler.removeEventListener('hardwareBackPress', backHandler);
-      };
-    }, []),
-  );
-
-  // useEffect(() => {
-  //   DevSettings.reload();
-  // }, []);
-  const getUserDetails = async () => {
-    let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
-      'loginUserDetails',
-    ).then((data: string | null) => (data ? JSON.parse(data) : null));
-    dispatch(addLocalStorageUserDetails(details));
-    // console.log('user details from local storage>>>>>', details);
-
-    // fetch complete user details based on user id
-    let payload = {
-      user_id: details?.user_id,
+  useEffect(() => {
+    setLoading(true);
+    getUserDetails();
+    getSliderImages();
+    AsyncStorage.setItem('loginStatus', JSON.stringify(true));
+    BackHandler.addEventListener('hardwareBackPress', backHandler);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backHandler);
     };
-    let data = await fetchUserDetails(payload);
-    setDetails(data);
-    // console.log('user details from api >>>>>', data);
+  }, []);
+
+  const getUserDetails = async () => {
+    try {
+      let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
+        'loginUserDetails',
+      ).then((data: string | null) => (data ? JSON.parse(data) : null));
+
+      if (details) {
+        dispatch(addLocalStorageUserDetails(details));
+
+        let payload = {
+          user_id: details?.user_id,
+        };
+        const data = await fetchUserDetails(payload);
+        setLoading(false);
+        setDetails(data);
+        // console.log('user data >>>>>', data);
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      // Handle error appropriately, e.g., show error message to the user
+    }
   };
 
   const backHandler = () => {
@@ -192,85 +194,122 @@ const HomeScreen: React.FC = () => {
     // navigation.navigate('loanFormScreen');
   };
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = () => {
     // setLoading(true);
     setRefreshing(true);
     getUserDetails();
+    getSliderImages();
     setTimeout(() => {
       // setLoading(false);
       setRefreshing(false);
     }, 400);
-  }, []);
+  };
+
+  // Render Item for Carousel
+  const renderItem = ({item, index}) => {
+    return (
+      <View>
+        <Image
+          source={{uri: item.slider_img}}
+          style={{
+            width: responsiveWidth(96),
+            height: responsiveHeight(30),
+            borderRadius: responsiveWidth(3),
+            borderWidth: responsiveWidth(0.1),
+          }}
+        />
+      </View>
+    );
+  };
+  const getSliderImages = async () => {
+    try {
+      let urls = await fetchSliderImages();
+      setCarousel(urls);
+      setLoading(false);
+    } catch (error) {
+      console.log('fetchSliderImagesData error >>>>>', error);
+    }
+  };
 
   return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-      <StatusBar barStyle={'dark-content'}/>
-    <ScrollView
-      refreshControl={
-        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-      }
-      style={styles.container}
-      showsVerticalScrollIndicator={false}>
-      {loading ? (
-        <View
-          style={[
-            styles.container,
-            {alignItems: 'center', justifyContent: 'center'},
-          ]}>
-          <ActivityIndicator size={'large'} color={COLORS.Primary} />
-        </View>
-      ) : (
-        <View>
-          {/* header container */}
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('userProfile')}
-              style={styles.userImg}>
-              {details?.img ? (
-                <Image source={{uri: details?.img}} style={styles.userImg} />
-              ) : (
-                <Image
-                  source={require('../../assets/profile.png')}
-                  style={styles.userImg}
-                />
-              )}
-            </TouchableOpacity>
-
-            <Text style={styles.userName}>{details?.name}</Text>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+      <StatusBar barStyle={'dark-content'} />
+      <ScrollView
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }
+        style={styles.container}
+        showsVerticalScrollIndicator={false}>
+        {loading ? (
+          <View
+            style={[
+              styles.container,
+              {alignItems: 'center', justifyContent: 'center'},
+            ]}>
+            <ActivityIndicator size={'large'} color={COLORS.Primary} />
           </View>
+        ) : (
+          <View>
+            {/* header container */}
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('userProfile')}
+                style={styles.userImg}>
+                {details?.img ? (
+                  <Image source={{uri: details?.img}} style={styles.userImg} />
+                ) : (
+                  <Image
+                    source={require('../../assets/profile.png')}
+                    style={styles.userImg}
+                  />
+                )}
+              </TouchableOpacity>
 
-          {/* Carosel */}
-          <View style={{width: responsiveWidth(96), alignSelf: 'center'}}>
-            <Carousel />
-          </View>
+              <Text style={styles.userName}>{details?.name}</Text>
+            </View>
 
-          {/* Loan Product */}
-          <View style={{backgroundColor: 'white', alignItems: 'center'}}>
-            <Text style={styles.loanProductText}>Loan Products</Text>
-            <FlatList
-              data={LoanList}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity
-                    onPress={handleLoanCategoryClick}
-                    style={styles.itemContainer}>
-                    <MaterialIcons
-                      name={`${item.icon}`}
-                      size={30}
-                      color={COLORS.Primary}
-                    />
-                    <Text style={styles.loanCategoryText}>
-                      {item.Loan_Category}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }}
-              numColumns={3}
-            />
+            {/* Carosel */}
+            <View
+              style={{
+                justifyContent: 'center',
+                height: responsiveScreenHeight(30),
+                alignItems: 'center',
+              }}>
+              <Carousel
+                data={carousel}
+                renderItem={renderItem}
+                sliderWidth={responsiveWidth(100)}
+                itemWidth={responsiveWidth(96)}
+              />
+            </View>
+
+            {/* Loan Product */}
+            <View style={{backgroundColor: 'white', alignItems: 'center'}}>
+              <Text style={styles.loanProductText}>Loan Products</Text>
+              <FlatList
+                data={LoanList}
+                renderItem={({item}) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={handleLoanCategoryClick}
+                      style={styles.itemContainer}>
+                      <MaterialIcons
+                        name={`${item.icon}`}
+                        size={30}
+                        color={COLORS.Primary}
+                      />
+                      <Text style={styles.loanCategoryText}>
+                        {item.Loan_Category}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                }}
+                numColumns={3}
+              />
+            </View>
           </View>
-        </View>
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };

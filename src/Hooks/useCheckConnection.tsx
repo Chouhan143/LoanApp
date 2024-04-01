@@ -1,4 +1,3 @@
-import {View, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import NetInfo from '@react-native-community/netinfo';
 
@@ -14,6 +13,7 @@ const useCheckConnection = () => {
       unsubscribe();
     };
   }, []);
+
   return isConnected;
 };
 

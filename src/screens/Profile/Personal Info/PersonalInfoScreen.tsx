@@ -26,6 +26,7 @@ import {fetchUserDetails} from '../../../Hooks/fetchUserDetails';
 import {updateDetails} from '../../../Hooks/updateDetails';
 import DocumentPicker from 'react-native-document-picker';
 import ImagePicker from 'react-native-image-crop-picker';
+import {da} from 'date-fns/locale';
 
 const PersonalInforScreen: React.FC = () => {
   const [userDetails, setUserDetails] = useState();
@@ -41,10 +42,6 @@ const PersonalInforScreen: React.FC = () => {
     state => state.ReduxStore.localstorageUserDetails,
   );
   // console.log('details', details);
-  useEffect(() => {
-    getDetails();
-  }, []);
-
   useEffect(() => {
     getDetails();
   }, []);
@@ -87,6 +84,8 @@ const PersonalInforScreen: React.FC = () => {
 
     try {
       let data = await updateDetails(formdata);
+      console.log('profile update data >>>>>', data);
+
       if (data.status === 'success') {
         setLoader(false);
         setEditable(false);
@@ -189,19 +188,19 @@ const PersonalInforScreen: React.FC = () => {
             />
           </View>
           <View style={{flex: 5, alignItems: 'center', flexDirection: 'row'}}>
-            <TextInput
-              style={styles.serviceText}
-              value={`Email : ${userDetails?.email}`}
-              editable={false}
-            />
-
-            <Text>
+            <Text style={styles.serviceText}>Email :</Text>
+            {/* <Text>
               {details.verified ? (
                 <Text style={styles.varifiedText}>(verified)</Text>
               ) : (
                 <Text style={styles.notVarifiedText}>(not verified)</Text>
               )}
-            </Text>
+            </Text> */}
+            <TextInput
+              style={styles.serviceText}
+              value={userDetails?.email}
+              editable={false}
+            />
           </View>
         </View>
 

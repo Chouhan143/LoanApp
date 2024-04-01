@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor:COLORS.Primary,
-    borderWidth:1
+    borderColor: COLORS.Primary,
+    borderWidth: 1,
     // marginTop: responsiveHeight(10),
   },
   userView: {

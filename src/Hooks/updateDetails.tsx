@@ -23,10 +23,8 @@ export const updateDetails = async (details: UpdateProfileDetailsProps) => {
       },
     });
     // console.log(response.ok);
-
     if (response.ok) {
       let data = await response.json();
-      // console.log('api response >>>>', data);
 
       if (data.status === 'success') {
         Toast.show({

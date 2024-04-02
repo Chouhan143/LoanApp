@@ -57,7 +57,7 @@ const HomeScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [carousel, setCarousel] = useState([]);
   const dispatch = useDispatch();
-
+  console.log('hiii');
   const LoanList = [
     {
       id: 1,
@@ -132,6 +132,7 @@ const HomeScreen: React.FC = () => {
       let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
         'loginUserDetails',
       ).then((data: string | null) => (data ? JSON.parse(data) : null));
+      console.log('details >>>>>', details);
 
       if (details) {
         dispatch(addLocalStorageUserDetails(details));
@@ -256,7 +257,10 @@ const HomeScreen: React.FC = () => {
                 onPress={() => navigation.navigate('userProfile')}
                 style={styles.userImg}>
                 {details?.img ? (
-                  <FastImage source={{uri: details?.img}} style={styles.userImg} />
+                  <FastImage
+                    source={{uri: details?.img}}
+                    style={styles.userImg}
+                  />
                 ) : (
                   <FastImage
                     source={require('../../assets/profile.png')}

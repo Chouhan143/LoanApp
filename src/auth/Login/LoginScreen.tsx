@@ -81,7 +81,7 @@ const LoginScreen: React.FC = () => {
       });
 
       // navigation based on role
-      console.log(data.data.role);
+      // console.log(data.data.role);
 
       switch (data.data.role) {
         case 'customer':

@@ -26,7 +26,7 @@ import {fetchUserDetails} from '../../../Hooks/fetchUserDetails';
 import {updateDetails} from '../../../Hooks/updateDetails';
 import DocumentPicker from 'react-native-document-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {da} from 'date-fns/locale';
+import FastImage from 'react-native-fast-image';
 
 const PersonalInforScreen: React.FC = () => {
   const [userDetails, setUserDetails] = useState();
@@ -116,13 +116,13 @@ const PersonalInforScreen: React.FC = () => {
       <View style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
           {img ? (
-            <Image
+            <FastImage
               source={{uri: img}}
               style={styles.userImgIcon}
               resizeMode="cover"
             />
           ) : (
-            <Image
+            <FastImage
               source={require('../../../assets/profile.png')}
               resizeMode="contain"
               style={styles.userImgIcon}

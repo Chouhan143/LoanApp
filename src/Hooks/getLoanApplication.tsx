@@ -24,6 +24,6 @@ export const getLoanApplication = async (details: GetApplicationListProps) => {
       return data;
     }
   } catch (error) {
-    console.log('failet to fetch loan application', error);
+    console.log('failed to fetch loan application', error);
   }
 };

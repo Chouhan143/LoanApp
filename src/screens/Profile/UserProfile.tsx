@@ -25,6 +25,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {clearLocalStorageUserDetails} from '../../redux/Slice';
 import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
+import FastImage from 'react-native-fast-image';
 
 const UserProfile: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -52,7 +53,7 @@ const UserProfile: React.FC = () => {
     };
     let data = await fetchUserDetails(payload);
     setUserDetails(data);
-    console.log('user details personal info screen >>>>', data);
+    // console.log('user details personal info screen >>>>', data);
   };
 
   const handleLogout = async () => {
@@ -104,9 +105,9 @@ const UserProfile: React.FC = () => {
       <View style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
           {userDetails.img ? (
-            <Image source={{uri: userDetails.img}} style={styles.userImgIcon} />
+            <FastImage source={{uri: userDetails.img}} style={styles.userImgIcon} />
           ) : (
-            <Image
+            <FastImage
               source={require('../../assets/profile.png')}
               style={styles.userImgIcon}
             />

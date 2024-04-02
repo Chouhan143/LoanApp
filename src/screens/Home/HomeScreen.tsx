@@ -37,7 +37,7 @@ import {useDispatch} from 'react-redux';
 import {fetchSliderImages} from '../../Hooks/fetchSliderImages';
 import Toast from 'react-native-toast-message';
 import {fetchUserDetails} from '../../Hooks/fetchUserDetails';
-import { SliderBox } from "react-native-image-slider-box"
+import FastImage from 'react-native-fast-image';
 
 type NavigationProps = StackNavigationProp<StackNavigationPropList>;
 type LocalStorageDetailsProps = {
@@ -256,9 +256,9 @@ const HomeScreen: React.FC = () => {
                 onPress={() => navigation.navigate('userProfile')}
                 style={styles.userImg}>
                 {details?.img ? (
-                  <Image source={{uri: details?.img}} style={styles.userImg} />
+                  <FastImage source={{uri: details?.img}} style={styles.userImg} />
                 ) : (
-                  <Image
+                  <FastImage
                     source={require('../../assets/profile.png')}
                     style={styles.userImg}
                   />

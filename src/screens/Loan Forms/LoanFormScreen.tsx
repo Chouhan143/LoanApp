@@ -50,16 +50,17 @@ const LoanFormScreen = () => {
 
   const data = [
     {key: 1, value: 'Education Loan'},
-    {key: 2, value: 'Personal Loan'},
-    {key: 3, value: 'MSME Loan'},
-    {key: 4, value: 'Home Loan'},
-    {key: 5, value: 'Business Loan'},
-    {key: 6, value: 'Project Loan'},
-    {key: 7, value: 'Working Capital Loan'},
+    {key: 2, value: 'Car Loan New'},
+    {key: 3, value: 'Car Loan Used'},
+    {key: 4, value: 'Commercial Vehical Loan New'},
+    {key: 5, value: 'Commercial Vehical Loan Used'},
+    {key: 6, value: 'Personal Loan'},
+    {key: 7, value: 'Home Loan'},
     {key: 8, value: 'Loan Against Property'},
-    {key: 9, value: 'CV-CE Loan'},
-    {key: 10, value: 'Car Loan'},
-    {key: 11, value: 'Gold Loan'},
+    {key: 9, value: 'Business Loan'},
+    {key: 10, value: 'MSME Loan'},
+    {key: 11, value: 'Working Capital Loan(CC-OD)'},
+    {key: 12, value: 'Project Loan'},
   ];
 
   const handleSelectedLoanProduct = (val: string) => {

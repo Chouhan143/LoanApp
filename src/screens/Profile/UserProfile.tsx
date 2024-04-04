@@ -52,6 +52,7 @@ const UserProfile: React.FC = () => {
       user_id: details.user_id,
     };
     let data = await fetchUserDetails(payload);
+    console.log('data check', data);
     setUserDetails(data);
     // console.log('user details personal info screen >>>>', data);
   };
@@ -105,7 +106,10 @@ const UserProfile: React.FC = () => {
       <View style={styles.profileContainer}>
         <View style={styles.userImgIcon}>
           {userDetails.img ? (
-            <FastImage source={{uri: userDetails.img}} style={styles.userImgIcon} />
+            <FastImage
+              source={{uri: userDetails.img}}
+              style={styles.userImgIcon}
+            />
           ) : (
             <FastImage
               source={require('../../assets/profile.png')}
@@ -129,6 +133,14 @@ const UserProfile: React.FC = () => {
               fontWeight: '400',
             }}>
             {details?.role}
+          </Text>
+          <Text
+            style={{
+              fontSize: responsiveFontSize(2),
+              color: COLORS.black,
+              fontWeight: '400',
+            }}>
+            {userDetails.role !== 'customer' && userDetails.id_code}
           </Text>
         </View>
       </View>

@@ -24,29 +24,34 @@ import {useSelector} from 'react-redux';
 import {fetchUserDetails} from '../../../Hooks/fetchUserDetails';
 import changePassword from '../../../Hooks/changePassword';
 import {ActivityIndicator} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChangePasswordScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
-  const [email, setEmail] = useState('');
   const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
   const [loader, setLoader] = useState(false);
 
   let uid = useSelector(
     state => state.ReduxStore.localstorageUserDetails.user_id,
   );
 
+  console.log('uid', uid);
   const handleProceedPress = async () => {
     setLoader(true);
     // let data = await fetchUserDetails(uid);
+    const userId = await AsyncStorage.getItem('userId');
     let payload = {
-      email: email,
-      password: oldPassword,
-      new_password: newPassword,
-      user_id: uid,
+      old_password: oldPassword,
+      password: password,
+      confirm_password: confirmPass,
+      user_id: userId,
     };
+
+    console.log('payload', payload);
     let data = await changePassword(payload);
-    // console.log('details>>>>>', data);
+    console.log('details change password>>>>>', data);
     setTimeout(() => {
       setLoader(false);
     }, 1000);
@@ -80,27 +85,27 @@ const ChangePasswordScreen: React.FC = () => {
             }}>
             <TextInput
               style={styles.inputeViewStyle}
-              placeholder="Enter your email"
-              onChangeText={text => setEmail(text)}
-              placeholderTextColor={"gray"}
-              // placeholderTextColor={COLORS.black}
-            />
-
-            <TextInput
-              style={styles.inputeViewStyle}
-              placeholder="Enter password"
+              placeholder="Enter Old password "
               onChangeText={text => setOldPassword(text)}
-              maxLength={6}
-              placeholderTextColor={"gray"}
+              placeholderTextColor={'gray'}
               // placeholderTextColor={COLORS.black}
             />
 
             <TextInput
               style={styles.inputeViewStyle}
               placeholder="Enter new password"
-              onChangeText={text => setNewPassword(text)}
+              onChangeText={text => setPassword(text)}
               maxLength={6}
-              placeholderTextColor={"gray"}
+              placeholderTextColor={'gray'}
+              // placeholderTextColor={COLORS.black}
+            />
+
+            <TextInput
+              style={styles.inputeViewStyle}
+              placeholder="Enter confirm password"
+              onChangeText={text => setConfirmPass(text)}
+              maxLength={6}
+              placeholderTextColor={'gray'}
               // placeholderTextColor={COLORS.black}
               secureTextEntry // Toggle password visibility
             />
@@ -121,7 +126,6 @@ const ChangePasswordScreen: React.FC = () => {
             )}
           </TouchableOpacity>
         </View>
-
       </View>
     </ScrollView>
   );
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
     borderWidth: responsiveWidth(0.2),
     marginVertical: responsiveScreenWidth(1),
     fontSize: responsiveFontSize(2),
-    color:"black"
+    color: 'black',
   },
   buttonContainer: {
     width: responsiveScreenWidth(100),

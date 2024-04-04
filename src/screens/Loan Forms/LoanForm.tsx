@@ -44,6 +44,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   const [current_fy, setCurrent_Fy] = useState('');
   const [loan_required, setLoan_Required] = useState('');
   const [img, setImg] = useState('');
+  const [gst_image, setGst_image] = useState('');
   const [pan_image, setPan_Image] = useState('');
   const [gst_number, setGst_Number] = useState('');
   const [last_fy, setLast_Fy] = useState('');
@@ -83,6 +84,28 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
 
       // res.uri is the URI of the selected image
       setPan_Image(res[0].uri);
+      console.log('URI of selected image:', res[0].uri);
+
+      // Handle the selected image URI here (e.g., set it to state, pass it to another function, etc.)
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+        console.log('User cancelled the picker');
+      } else {
+        // Error occurred while picking the file
+        console.log('Error picking file:', err);
+      }
+    }
+  };
+
+  const selectGstPhoto = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images], // specify the type of files to pick (optional)
+      });
+
+      // res.uri is the URI of the selected image
+      setGst_image(res[0].uri);
       console.log('URI of selected image:', res[0].uri);
 
       // Handle the selected image URI here (e.g., set it to state, pass it to another function, etc.)
@@ -164,6 +187,15 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
       });
     }
 
+    if (gst_image) {
+      const gstImageName = gst_image.split('/').pop(); // Get image name from URI
+      formdata.append('gst_image', {
+        uri: gst_image,
+        name: gstImageName,
+        type: 'image/jpeg', // Adjust according to your image type
+      });
+    }
+
     let data = await submitLoanForm(formdata);
     console.log('submit form response >>>>>>', data);
     if (data.result) {
@@ -218,6 +250,8 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
               ? data.errors.mobile[0]
               : data.errors.pan_image
               ? data.errors.pan_image[0]
+              : data.errors.gst_image
+              ? data.errors.gst_image[0]
               : data.errors.pan_number
               ? data.errors.pan_number[0]
               : data.errors.loan_category
@@ -489,19 +523,30 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
         )}
       </View>
 
-      {/* Adhar card */}
-      {/* <View style={styles.inputFieldContainer}>
+      {/* Gst image  */}
+      <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
-          Adhar Card
+          Gst certificate <Text style={{color: 'red'}}>*</Text>
         </Text>
-        <TouchableOpacity style={styles.selectPhoto}>
-          <Font5
-            name="camera"
-            size={responsiveWidth(12)}
-            color={COLORS.Primary}
-          />
-        </TouchableOpacity>
-      </View> */}
+        {gst_image ? (
+          <TouchableOpacity onPress={selectGstPhoto} style={styles.selectPhoto}>
+            <Font5
+              name="check-circle"
+              size={responsiveWidth(12)}
+              color={'green'}
+            />
+            <Text style={styles.selectedImgText}>image is selected</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={selectGstPhoto} style={styles.selectPhoto}>
+            <Font5
+              name="camera"
+              size={responsiveWidth(12)}
+              color={COLORS.Primary}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity

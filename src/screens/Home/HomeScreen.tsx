@@ -66,33 +66,34 @@ const HomeScreen: React.FC = () => {
     },
     {
       id: 2,
+      icon: 'directions-car-filled',
+      Loan_Category: 'Car Loan New',
+    },
+    {
+      id: 3,
+      icon: 'car-repair',
+      Loan_Category: 'Car Loan Used',
+    },
+    {
+      id: 4,
+      icon: 'fire-truck',
+      Loan_Category: 'Commercial Vehical Loan New',
+    },
+    {
+      id: 5,
+      icon: 'fire-truck',
+      Loan_Category: 'Commercial Vehical Loan Used',
+    },
+
+    {
+      id: 6,
       icon: 'person',
       Loan_Category: 'Personal Loan',
     },
     {
-      id: 3,
-      icon: 'store-mall-directory',
-      Loan_Category: ' MSME Loan',
-    },
-    {
-      id: 4,
+      id: 7,
       icon: 'home',
       Loan_Category: 'Home Loan',
-    },
-    {
-      id: 5,
-      icon: 'business',
-      Loan_Category: 'Business Loan',
-    },
-    {
-      id: 6,
-      icon: 'attach-money',
-      Loan_Category: 'Project Loan',
-    },
-    {
-      id: 7,
-      icon: 'assured-workload',
-      Loan_Category: 'Working Capital Loan',
     },
     {
       id: 8,
@@ -101,18 +102,24 @@ const HomeScreen: React.FC = () => {
     },
     {
       id: 9,
-      icon: 'add-card',
-      Loan_Category: 'CV-CE Loan',
+      icon: 'business',
+      Loan_Category: 'Business Loan',
     },
     {
       id: 10,
-      icon: 'directions-car-filled',
-      Loan_Category: 'Car Loan',
+      icon: 'store-mall-directory',
+      Loan_Category: ' MSME Loan',
     },
     {
       id: 11,
-      icon: 'fiber-smart-record',
-      Loan_Category: 'Gold Loan',
+      icon: 'assured-workload',
+      Loan_Category: 'Working Capital Loan(CC-OD)',
+    },
+
+    {
+      id: 12,
+      icon: 'attach-money',
+      Loan_Category: 'Project Loan',
     },
   ];
 

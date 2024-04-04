@@ -1,14 +1,16 @@
 import Toast from 'react-native-toast-message';
 import {BaseUrl} from '../constant/BaseUrl';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {useNavigation} from '@react-navigation/native';
 export type ChangePasswordProps = {
-  email: string;
+  old_password: string;
   password: string;
-  new_password: string;
+  confirm_password: string;
   user_id: any;
 };
 
 const changePassword = async (details: ChangePasswordProps) => {
+  const navigation = useNavigation();
   try {
     let response = await fetch(`${BaseUrl}/change_password`, {
       method: 'POST',
@@ -41,20 +43,20 @@ const changePassword = async (details: ChangePasswordProps) => {
       return data;
     } else {
       let data = await response.json();
-    //   console.log('password updated>>>>>', data);
+      //   console.log('password updated>>>>>', data);
       Toast.show({
         type: 'error',
         text1: 'Failed',
         text2: `${
-          data.errors.email
-            ? data.errors.email[0]
-            : data.errors.new_password
-            ? data.errors.new_password[0]
-            : data.errors.user_id
-            ? data.errors.user_id[0]
+          data.errors.old_password
+            ? data.errors.old_password[0]
             : data.errors.password
             ? data.errors.password[0]
-            : "faile to update password"
+            : data.errors.user_id
+            ? data.errors.user_id[0]
+            : data.errors.confirm_password
+            ? data.errors.confirm_password[0]
+            : 'faile to update password'
         }`,
         text1Style: {
           fontSize: responsiveFontSize(2),

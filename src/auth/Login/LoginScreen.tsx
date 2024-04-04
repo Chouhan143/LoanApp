@@ -8,7 +8,7 @@ import {
   ScrollView,
   Alert,
   BackHandler,
-  DevSettings
+  DevSettings,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -60,9 +60,12 @@ const LoginScreen: React.FC = () => {
       password: password,
     };
     let data = await userLogin(payload);
-    // console.log("login response >>>>>",data);
+    console.log('login response >>>>>', data);
     if (data.data) {
+      const userId = data.data.user_id;
+      console.log('userid', userId);
       await AsyncStorage.setItem('loginUserDetails', JSON.stringify(data.data));
+      await AsyncStorage.setItem('userId', JSON.stringify(userId));
       setLoader(false);
       Toast.show({
         type: 'success',
@@ -290,8 +293,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   inputStyle: {
-    flex:1,
-    color:"black",
+    flex: 1,
+    color: 'black',
     fontSize: responsiveFontSize(2),
   },
   loginBtn: {

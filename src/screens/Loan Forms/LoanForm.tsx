@@ -28,10 +28,15 @@ import {ActivityIndicator} from 'react-native';
 import {NavigationProps} from '../../navigation/Navigation';
 import DatePicker from 'react-native-date-picker';
 import {format} from 'date-fns';
-const LoanForm: React.FC<{selectedLoan: string}> = ({
+const LoanForm: React.FC<{
+  selectedLoan: string;
+  selectedOccupation: string;
+}> = ({
   selectedLoan,
+  selectedOccupation,
 }: {
   selectedLoan: string;
+  selectedOccupation: string;
 }) => {
   const [firm_name, setFirm_name] = useState('');
   // const [loan_category, setLoan_Category] = useState(selectedLoan);
@@ -48,6 +53,8 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   const [pan_image, setPan_Image] = useState('');
   const [gst_number, setGst_Number] = useState('');
   const [last_fy, setLast_Fy] = useState('');
+  const [bankAccount, setBankAcount] = useState('');
+
   const [loader, setLoader] = useState(false);
   const [open, setOpen] = useState(false);
   const details = useSelector(
@@ -154,6 +161,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
     // Append text data
     formdata.append('user_id', details.user_id);
     formdata.append('loan_category', selectedLoan);
+    formdata.append('occupation', selectedOccupation);
     formdata.append('firm_name', firm_name);
     formdata.append('mobile', mobile);
     formdata.append('contact_person', contact_person);
@@ -164,6 +172,8 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
     formdata.append('loan_required', loan_required);
     formdata.append('gst_number', gst_number);
     formdata.append('last_fy', last_fy);
+    formdata.append('bank_account', bankAccount);
+
     // formdata.append('code', details.code);
 
     // console.log("loan category",selectedLoan);
@@ -278,6 +288,18 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
   // console.log('selected date >>>>', date_of_corporate);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.inputFieldContainer}>
+        <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
+          Loan Required <Text style={{color: 'red'}}>*</Text>
+        </Text>
+        <TextInput
+          placeholder="Enter loan requirement"
+          style={styles.textInput}
+          onChangeText={text => setLoan_Required(text)}
+          placeholderTextColor={'gray'}
+          keyboardType="number-pad"
+        />
+      </View>
       <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
           Firm Name <Text style={{color: 'red'}}>*</Text>
@@ -417,7 +439,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
 
       <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
-          Current FY sales Tax | IT Returns{' '}
+          Current FY Turnover (Net Profit ){' '}
           <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
@@ -425,6 +447,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
           style={styles.textInput}
           onChangeText={text => setCurrent_Fy(text)}
           placeholderTextColor={'gray'}
+          keyboardType="number-pad"
         />
       </View>
 
@@ -450,24 +473,24 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
 
       <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
-          Last FY Sales Tax | IT Returns <Text style={{color: 'red'}}>*</Text>
+          last FY Turnover(Net Profit ) <Text style={{color: 'red'}}>*</Text>
         </Text>
         <TextInput
           placeholder="Enter last FY IT return"
           style={styles.textInput}
           onChangeText={text => setLast_Fy(text)}
           placeholderTextColor={'gray'}
+          keyboardType="number-pad"
         />
       </View>
-
       <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
-          Loan Required <Text style={{color: 'red'}}>*</Text>
+          Bank Account No. CC/Current (optional ){' '}
         </Text>
         <TextInput
-          placeholder="Enter loan requirement"
+          placeholder="Enter Bank account No."
           style={styles.textInput}
-          onChangeText={text => setLoan_Required(text)}
+          onChangeText={text => setBankAcount(text)}
           placeholderTextColor={'gray'}
           keyboardType="number-pad"
         />
@@ -526,7 +549,7 @@ const LoanForm: React.FC<{selectedLoan: string}> = ({
       {/* Gst image  */}
       <View style={styles.inputFieldContainer}>
         <Text style={{fontSize: responsiveFontSize(2), color: COLORS.black}}>
-          Gst certificate <Text style={{color: 'red'}}>*</Text>
+          Gst certificate (optional)
         </Text>
         {gst_image ? (
           <TouchableOpacity onPress={selectGstPhoto} style={styles.selectPhoto}>

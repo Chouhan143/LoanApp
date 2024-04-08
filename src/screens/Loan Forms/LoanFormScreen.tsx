@@ -41,6 +41,8 @@ type LocalStorageDetailsProps = {
 
 const LoanFormScreen = () => {
   const [selected, setSelected] = useState<string>('');
+  const [selectedOccupation, setSelectedOccupation] = useState<string>('');
+
   const navigation = useNavigation<NavigationProps>();
   const [details, setDetails] = useState<LocalStorageDetailsProps | null>();
 
@@ -63,10 +65,24 @@ const LoanFormScreen = () => {
     {key: 12, value: 'Project Loan'},
   ];
 
+  const OccupationData = [
+    {key: 1, value: 'Salaried'},
+    {key: 2, value: ' Self Employee'},
+    {key: 3, value: 'Propertership'},
+    {key: 4, value: 'Partnership'},
+    {key: 5, value: 'Private Limited'},
+    {key: 6, value: 'Limited'},
+    {key: 7, value: 'Trust'},
+    {key: 8, value: 'Socity'},
+  ];
+
   const handleSelectedLoanProduct = (val: string) => {
     setSelected(val);
   };
 
+  const handleSelectedOccupation = (val: string) => {
+    setSelectedOccupation(val);
+  };
   const getUserDetails = async () => {
     let details: LocalStorageDetailsProps | null = await AsyncStorage.getItem(
       'loginUserDetails',
@@ -153,9 +169,31 @@ const LoanFormScreen = () => {
             color: 'black',
           }}
         />
+        <Text
+          style={{
+            fontSize: responsiveFontSize(2),
+            marginTop: responsiveHeight(1),
+            color: COLORS.black,
+          }}>
+          Occupation <Text style={{color: 'red'}}>*</Text>
+        </Text>
+        <SelectList
+          setSelected={(val: string) => handleSelectedOccupation(val)}
+          data={OccupationData}
+          save="value"
+          boxStyles={styles.selectLoanTypeStyle}
+          inputStyles={{color: COLORS.black, fontSize: responsiveFontSize(1.8)}}
+          dropdownTextStyles={{
+            fontSize: responsiveFontSize(1.8),
+            color: 'black',
+          }}
+        />
 
         {/* loan form */}
-        <LoanForm selectedLoan={selected} />
+        <LoanForm
+          selectedLoan={selected}
+          selectedOccupation={selectedOccupation}
+        />
       </View>
     </ScrollView>
   );

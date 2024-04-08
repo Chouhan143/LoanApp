@@ -9,7 +9,6 @@ import {
 } from 'react-native-responsive-dimensions';
 import {COLORS} from '../../themes/COLORS';
 
-
 const styles = StyleSheet.create({
   conatainer: {
     flex: 1,
@@ -37,8 +36,8 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(2),
     paddingLeft: responsiveWidth(2),
     fontSize: responsiveScreenFontSize(2),
-    marginVertical:responsiveScreenWidth(3),
-    color:'black'
+    marginVertical: responsiveScreenWidth(3),
+    color: 'black',
   },
   loginBtn: {
     width: responsiveWidth(92),
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     flex: 5,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    marginTop:responsiveWidth(2)
+    marginTop: responsiveWidth(2),
   },
   buttonContainer: {
     flex: 1.5,

@@ -2,11 +2,12 @@ import {BaseUrl} from '../constant/BaseUrl';
 
 export type UserDetails = {
   name: string;
+  firm_name: string;
   mobile: string;
   email: string;
   password: string;
   location: string;
-  role: "customer" | "partner" | "associate";
+  role: 'customer' | 'partner' | 'associate';
 };
 
 export const registerUser = async (details: UserDetails) => {

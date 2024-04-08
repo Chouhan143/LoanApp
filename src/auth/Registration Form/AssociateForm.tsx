@@ -38,6 +38,7 @@ type NavigationProps = StackNavigationProp<
 const AssociateForm: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
   const [name, setName] = useState<string>('');
+  const [firmName, setFirmName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -50,6 +51,7 @@ const AssociateForm: React.FC = () => {
     setLoader(true);
     const details: UserDetails = {
       name: name,
+      firm_name: firmName,
       email: email,
       mobile: phone,
       password: password,
@@ -90,6 +92,8 @@ const AssociateForm: React.FC = () => {
             ? data.errors.email
             : data.errors.name
             ? data.errors.name
+            : data.errors.firm_name
+            ? data.errors.firm_name
             : data.errors.password
             ? data.errors.password
             : data.errors.mobile
@@ -126,6 +130,12 @@ const AssociateForm: React.FC = () => {
             style={styles.inputFiled}
             onChangeText={text => setName(text)}
             placeholder="Enter your name"
+            placeholderTextColor={'gray'}
+          />
+          <TextInput
+            style={styles.inputFiled}
+            onChangeText={text => setFirmName(text)}
+            placeholder="Firm Name ( Optional)"
             placeholderTextColor={'gray'}
           />
           <TextInput

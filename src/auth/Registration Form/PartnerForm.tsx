@@ -42,6 +42,7 @@ const PartnerForm = () => {
   const [password, setPassword] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [firmName, setFirmName] = useState<string>('');
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
 
@@ -49,6 +50,7 @@ const PartnerForm = () => {
     setLoader(true);
     const details: UserDetails = {
       name: name,
+      firm_name: firmName,
       email: email,
       mobile: phone,
       password: password,
@@ -89,6 +91,8 @@ const PartnerForm = () => {
             ? data.errors.email
             : data.errors.name
             ? data.errors.name
+            : data.errors.firm_name
+            ? data.errors.firm_name
             : data.errors.password
             ? data.errors.password
             : data.errors.mobile
@@ -125,6 +129,12 @@ const PartnerForm = () => {
             style={styles.inputFiled}
             onChangeText={text => setName(text)}
             placeholder="Enter your name"
+            placeholderTextColor={'gray'}
+          />
+          <TextInput
+            style={styles.inputFiled}
+            onChangeText={text => setFirmName(text)}
+            placeholder="Firm Name ( Optional)"
             placeholderTextColor={'gray'}
           />
           <TextInput

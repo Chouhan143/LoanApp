@@ -29,6 +29,7 @@ import {Image, Text, View} from 'react-native';
 import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 import useCheckConnection from '../Hooks/useCheckConnection';
 import Noconnection from '../components/Noconnection';
+import Notification from '../screens/Profile/Notification/Notification';
 
 export type StackNavigationPropList = {
   loginScreen: undefined;
@@ -45,6 +46,7 @@ export type StackNavigationPropList = {
   resetVerifyOtp: undefined;
   changePasswordScreen: undefined;
   verifyEmailOtp: undefined;
+  Notification: undefined;
 };
 
 export type NavigationProps = StackNavigationProp<StackNavigationPropList>;
@@ -182,6 +184,11 @@ export default function Navigation() {
           <Stack.Screen
             name="personalDetails"
             component={PersonalInforScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
             options={{headerShown: false}}
           />
           <Stack.Screen

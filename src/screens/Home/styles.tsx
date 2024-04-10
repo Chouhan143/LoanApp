@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     height: responsiveWidth(14),
     borderRadius: responsiveWidth(10),
     // backgroundColor: COLORS.graylight,
-    marginLeft:responsiveScreenWidth(1),
+    marginLeft: responsiveScreenWidth(1),
     justifyContent: 'center',
     alignItems: 'center',
   },

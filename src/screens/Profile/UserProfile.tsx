@@ -15,6 +15,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import UserICon from 'react-native-vector-icons/FontAwesome';
+import NotificationIcon from 'react-native-vector-icons/MaterialIcons';
 import Security from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -156,6 +157,17 @@ const UserProfile: React.FC = () => {
             color={'gray'}
           />
           <Text style={styles.serviceText}>Personal Information</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Notification')}
+          style={styles.userView}>
+          <NotificationIcon
+            name={'notifications-active'}
+            size={responsiveFontSize(3.5)}
+            color={'gray'}
+          />
+          <Text style={styles.serviceText}>Notifications</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
